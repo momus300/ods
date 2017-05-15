@@ -1,3 +1,7 @@
 panel:
   path:     /
   defaults: { _controller: AppBundle:Panel:show }
+
+activities:
+  path:     /activities
+  defaults: { _controller: AppBundle:Panel:activities }

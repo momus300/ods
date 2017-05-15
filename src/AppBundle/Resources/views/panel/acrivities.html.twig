@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form action="" method="post">
+        <input type="text" name="test" />
+
+        <input type="submit" />
+    </form>
+
+    {% for activity in activities %}
+        {{ activity.name }}
+    {% endfor %}
+{% endblock %}
+
