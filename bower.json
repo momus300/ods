@@ -1,0 +1,19 @@
+{
+  "name": "ods",
+  "authors": [
+    "Marek"
+  ],
+  "description": "",
+  "main": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
