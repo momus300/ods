@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CcConfigurations" table="cc_configurations">
+    <indexes>
+      <index name="model_key_idx" columns="model_key"/>
+      <index name="batch_id_idx" columns="batch_id"/>
+      <index name="appliance_id" columns="appliance_id"/>
+      <index name="application_id" columns="application_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="cc_id_UNIQUE" columns="cc_id"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="modelKey" type="string" column="model_key" length="6" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelId" type="string" column="model_id" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelName" type="string" column="model_name" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelCode" type="string" column="model_code" length="3" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="versionId" type="string" column="version_id" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="versionName" type="string" column="version_name" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="versionCode" type="string" column="version_code" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="motorId" type="string" column="motor_id" length="2" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="motorName" type="string" column="motor_name" length="60" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="motorCode" type="string" column="motor_code" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="exteriorId" type="string" column="exterior_id" length="4" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="exteriorName" type="string" column="exterior_name" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="exteriorCode" type="string" column="exterior_code" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="interiorId" type="string" column="interior_id" length="2" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="interiorName" type="string" column="interior_name" length="60" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="interiorCode" type="string" column="interior_code" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="applianceId" type="integer" column="appliance_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="applianceCode" type="string" column="appliance_code" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="applianceName" type="string" column="appliance_name" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="appliancePrice" type="decimal" column="appliance_price" precision="15" scale="2" nullable="false"/>
+    <field name="enginePrice" type="decimal" column="engine_price" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="exteriorPrice" type="decimal" column="exterior_price" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="equipmentPrice" type="decimal" column="equipment_price" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="importerPrice" type="decimal" column="importer_price" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="dealerPrice" type="decimal" column="dealer_price" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="discountValue" type="decimal" column="discount_value" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="pasDiscount" type="decimal" column="pas_discount" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="finished" type="boolean" column="finished" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="ccId" type="integer" column="cc_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="stateMachine" type="text" column="state_machine" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="configurationForDate" type="datetime" column="configuration_for_date" nullable="true"/>
+    <field name="minCreditRate" type="integer" column="min_credit_rate" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="pdfPath" type="string" column="pdf_path" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="deleted" type="datetime" column="deleted" nullable="true"/>
+    <field name="batchId" type="string" column="batch_id" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-one field="application" target-entity="Applications" fetch="LAZY">
+      <join-columns>
+        <join-column name="application_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

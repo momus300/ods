@@ -1,40 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="AppBundle\Entity\Activities" table="activities">
+    <indexes>
+      <index name="report_channel_id" columns="report_channel_id"/>
+      <index name="report_group_id" columns="report_group_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="code_UNIQUE" columns="code"/>
+    </unique-constraints>
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="reportChannelId" type="integer" column="report_channel_id" nullable="true">
-      <options>
-        <option name="unsigned"/>
-      </options>
-    </field>
-    <field name="reportGroupId" type="integer" column="report_group_id" nullable="true">
-      <options>
-        <option name="unsigned"/>
-      </options>
-    </field>
-    <field name="code" type="string" column="code" length="49" nullable="true">
+    <field name="code" type="string" column="code" length="50" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="name" type="string" column="name" length="100" nullable="true">
+    <field name="name" type="string" column="name" length="100" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="nameReport" type="string" column="name_report" length="54" nullable="true">
+    <field name="nameReport" type="string" column="name_report" length="100" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="description" type="string" column="description" length="583" nullable="true">
+    <field name="description" type="text" column="description" length="65535" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="url" type="string" column="url" length="80" nullable="true">
+    <field name="url" type="string" column="url" length="100" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
@@ -44,55 +41,67 @@
         <option name="fixed"/>
       </options>
     </field>
-    <field name="businessName" type="string" column="business_name" length="21" nullable="true">
+    <field name="businessName" type="string" column="business_name" length="100" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="campaignExtId" type="string" column="campaign_ext_id" length="10" nullable="true">
+    <field name="campaignExtId" type="string" column="campaign_ext_id" length="100" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="actionType" type="string" column="action_type" length="23" nullable="true">
+    <field name="actionType" type="string" column="action_type" length="40" nullable="true">
       <options>
         <option name="fixed"/>
+        <option name="comment">Type action: OF - check offer JP - test drive Serwis - service Flota_JP - flota test drive Flota_kontakt - contact form (flota) Flota_kontakt_skr - soft contact form (flota)</option>
       </options>
     </field>
     <field name="channel" type="integer" column="channel" nullable="true">
       <options>
         <option name="unsigned"/>
+        <option name="comment">Distribution channel of form: 0 - Internet 1 - Event 2 - emailing 3 - Ipad 4 - callcenter, 5 - mobile, 6 - SMS, 7 - TV</option>
       </options>
     </field>
-    <field name="category" type="string" column="category" length="1" nullable="true">
+    <field name="category" type="string" column="category" length="200" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="active" type="integer" column="active" nullable="true">
+    <field name="active" type="boolean" column="active" nullable="false">
       <options>
-        <option name="unsigned"/>
+        <option name="default">1</option>
       </options>
     </field>
-    <field name="activeStart" type="string" column="active_start" length="10" nullable="true">
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
       <options>
-        <option name="fixed"/>
+        <option name="default">CURRENT_TIMESTAMP</option>
       </options>
     </field>
-    <field name="activeEnd" type="string" column="active_end" length="10" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
-    <field name="created" type="string" column="created" length="19" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
-    <field name="lastModified" type="string" column="last_modified" length="19" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="application" target-entity="Applications" mapped-by="activity" fetch="LAZY"/>
+    <many-to-many field="emailTemplate" target-entity="EmailTemplates" inversed-by="activity" fetch="LAZY">
+      <join-table name="activity_email_triggers">
+        <join-columns>
+          <join-column name="activity_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="email_template_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="data" target-entity="ActivityDataDefs" inversed-by="activity" fetch="LAZY">
+      <join-table name="activity_data">
+        <join-columns>
+          <join-column name="activity_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="data_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="activityExportDef" target-entity="ActivityExportDefs" mapped-by="activity" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

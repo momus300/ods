@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CustomerActivityExport" table="customer_activity_export">
+    <indexes>
+      <index name="fk_activity_export_has_customer_activities_customer_activit_idx" columns="customer_activity_id"/>
+      <index name="fk_activity_export_has_customer_activities_activity_export1_idx" columns="activity_export_request_id"/>
+      <index name="fk_customer_activity_export_applications1_idx" columns="application_id"/>
+      <index name="idx_application_customer_activity" columns="application_id,customer_activity_id"/>
+    </indexes>
+    <id name="activityExportRequest" association-key="true"/>
+    <id name="customerActivity" association-key="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <one-to-one field="activityExportRequest" target-entity="ActivityExportRequests" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_export_request_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="customerActivity" target-entity="CustomerActivities" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <many-to-one field="application" target-entity="Applications" fetch="LAZY">
+      <join-columns>
+        <join-column name="application_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

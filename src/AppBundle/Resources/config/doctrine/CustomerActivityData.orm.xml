@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CustomerActivityData" table="customer_activity_data">
+    <indexes>
+      <index name="fk_customer_activities_has_activity_data_activity_data2_idx" columns="activity_id,data_id"/>
+      <index name="fk_customer_activities_has_activity_data_customer_activitie_idx" columns="customer_activity_id"/>
+      <index name="created_idx" columns="created"/>
+      <index name="fk_customer_activity_data_activity_data_def" columns="data_id"/>
+      <index name="IDX_CA5258F281C06096" columns="activity_id"/>
+    </indexes>
+    <id name="customerActivity" association-key="true"/>
+    <id name="activity" association-key="true"/>
+    <id name="data" association-key="true"/>
+    <field name="value" type="text" column="value" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <one-to-one field="data" target-entity="ActivityDataDefs" fetch="LAZY">
+      <join-columns>
+        <join-column name="data_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="activity" target-entity="Activities" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="customerActivity" target-entity="CustomerActivities" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

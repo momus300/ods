@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CustomerActivities" table="customer_activities">
+    <indexes>
+      <index name="fk_activities_has_customers_customers1_idx" columns="customer_id"/>
+      <index name="fk_customer_activities_cc_configurations1_idx" columns="cc_configuration_id"/>
+      <index name="fk_customer_activities_sessions1_idx" columns="session_id"/>
+      <index name="created_idx" columns="created"/>
+      <index name="fk_customer_activities_application_activities1_idx" columns="application_id"/>
+      <index name="fk_customer_activities_activity_sources1_idx" columns="activity_source_id"/>
+      <index name="fk_customer_activities_customer_activity_imports1_idx" columns="customer_activity_import_id"/>
+      <index name="fk_customer_activities_activities1_idx" columns="activity_id"/>
+      <index name="idx_lead_processed" columns="lead_processed"/>
+      <index name="value_idx" columns="value"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="customerActivityImportId" type="integer" column="customer_activity_import_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="value" type="integer" column="value" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="data" type="text" column="data" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="extIp" type="string" column="ext_ip" length="15" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="leadProcessed" type="boolean" column="lead_processed" nullable="false">
+      <options>
+        <option name="default">b'0'</option>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="ccConfiguration" target-entity="CcConfigurations" fetch="LAZY">
+      <join-columns>
+        <join-column name="cc_configuration_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="session" target-entity="Sessions" fetch="LAZY">
+      <join-columns>
+        <join-column name="session_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customer" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="application" target-entity="ApplicationActivities" fetch="LAZY">
+      <join-columns>
+        <join-column name="application_id" referenced-column-name="application_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="activitySource" target-entity="ActivitySources" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_source_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="activity" target-entity="Activities" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="giodoDefinition" target-entity="GiodoDefinition" mapped-by="customerActivity" fetch="LAZY"/>
+  </entity>
+</doctrine-mapping>

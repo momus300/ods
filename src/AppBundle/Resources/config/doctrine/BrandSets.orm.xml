@@ -7,17 +7,25 @@
     <field name="binCode" type="integer" column="bin_code" nullable="true">
       <options>
         <option name="unsigned"/>
+        <option name="comment">Kod binarny - suma kodów binarnych brandów.
+Wymaga triggera.</option>
       </options>
     </field>
-    <field name="created" type="string" column="created" length="19" nullable="true">
+    <field name="created" type="datetime" column="created" nullable="false">
       <options>
-        <option name="fixed"/>
+        <option name="default">CURRENT_TIMESTAMP</option>
       </options>
     </field>
-    <field name="lastModified" type="string" column="last_modified" length="19" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="brand" target-entity="Brands" inversed-by="brandSet" fetch="LAZY">
+      <join-table name="brand_set_brands">
+        <join-columns>
+          <join-column name="brand_set_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="brand_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

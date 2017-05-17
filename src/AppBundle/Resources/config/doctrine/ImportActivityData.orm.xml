@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ImportActivityData" table="import_activity_data">
+    <indexes>
+      <index name="fk_activities_has_activity_data_defs_activity_data_defs1_idx" columns="data_id"/>
+      <index name="fk_activities_has_activity_data_defs_activities1_idx" columns="activity_id"/>
+    </indexes>
+    <id name="activityId" type="integer" column="activity_id"/>
+    <id name="dataId" type="integer" column="data_id"/>
+    <field name="defaultValue" type="text" column="default_value" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Default value or metatag</option>
+      </options>
+    </field>
+    <field name="required" type="integer" column="required" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+  </entity>
+</doctrine-mapping>

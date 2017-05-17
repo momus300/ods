@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Verifications" table="verifications">
+    <indexes>
+      <index name="fk_verifications_customers1_idx" columns="customer_id"/>
+      <index name="fk_verifications_application_auth_types1_idx" columns="auth_type_id,application_id"/>
+      <index name="email_idx" columns="email"/>
+      <index name="email_token_idx" columns="email,token"/>
+      <index name="cellphone_idx" columns="cellphone"/>
+      <index name="code_idx" columns="code"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="token_UNIQUE" columns="token"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="requestType" type="boolean" column="request_type" nullable="false">
+      <options>
+        <option name="comment">Customer requests for:
+0 - registration
+1 - change email
+2 - change cellphone
+3 - change auth value (pwd, pin, token)
+4 - change company email
+5 - change company cellphone
+6 - registration company</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="notificationType" type="boolean" column="notification_type" nullable="false">
+      <options>
+        <option name="comment">Customer requests for notification via:
+0 - email
+1 - cellphone
+</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="email" type="string" column="email" length="80" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="token" type="string" column="token" length="32" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="cellphone" type="string" column="cellphone" length="9" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="code" type="string" column="code" length="5" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="sent" type="datetime" column="sent" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="verified" type="datetime" column="verified" nullable="true"/>
+    <field name="verifiable" type="boolean" column="verifiable" nullable="false">
+      <options>
+        <option name="comment">Is verifable yet (1)? If not (0) the verification record is inactive, eg. new verification was sent.</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="landingPage" type="string" column="landing_page" length="250" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="addingIp" type="string" column="adding_ip" length="15" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="verificationIp" type="string" column="verification_ip" length="15" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="customer" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="authType" target-entity="ApplicationAuthTypes" fetch="LAZY">
+      <join-columns>
+        <join-column name="auth_type_id" referenced-column-name="auth_type_id"/>
+        <join-column name="application_id" referenced-column-name="application_id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

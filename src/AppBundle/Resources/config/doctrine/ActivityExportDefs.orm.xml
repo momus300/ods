@@ -25,5 +25,25 @@
       </options>
     </field>
     <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="application" target-entity="Applications" inversed-by="activityExportDef" fetch="LAZY">
+      <join-table name="activity_export_def_application">
+        <join-columns>
+          <join-column name="activity_export_def_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="application_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="activity" target-entity="Activities" inversed-by="activityExportDef" fetch="LAZY">
+      <join-table name="activity_export_def_activity">
+        <join-columns>
+          <join-column name="activity_export_def_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="activity_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

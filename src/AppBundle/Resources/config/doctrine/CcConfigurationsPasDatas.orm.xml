@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CcConfigurationsPasDatas" table="cc_configurations_pas_datas">
+    <indexes>
+      <index name="fk_cc_configurations_pas_datas_pas_datas_idx" columns="pas_data_id"/>
+      <index name="fk_cc_configurations_pas_datas_cc_confiugrations_idx" columns="cc_configuration_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="recommended" type="boolean" column="recommended" nullable="false">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="price" type="decimal" column="price" precision="15" scale="2" nullable="true"/>
+    <field name="eCouponId" type="integer" column="e_coupon_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="amount" type="integer" column="amount" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <field name="deleted" type="boolean" column="deleted" nullable="true"/>
+    <many-to-one field="pasData" target-entity="PasDatas" fetch="LAZY">
+      <join-columns>
+        <join-column name="pas_data_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="ccConfiguration" target-entity="CcConfigurations" fetch="LAZY">
+      <join-columns>
+        <join-column name="cc_configuration_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

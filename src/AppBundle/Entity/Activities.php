@@ -7,57 +7,43 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Activities
  *
- * @ORM\Table(name="activities")
+ * @ORM\Table(name="activities", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"code"})}, indexes={@ORM\Index(name="report_channel_id", columns={"report_channel_id"}), @ORM\Index(name="report_group_id", columns={"report_group_id"})})
  * @ORM\Entity
  */
 class Activities
 {
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="report_channel_id", type="integer", nullable=true)
-     */
-    private $reportChannelId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="report_group_id", type="integer", nullable=true)
-     */
-    private $reportGroupId;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=49, nullable=true)
+     * @ORM\Column(name="code", type="string", length=50, nullable=false)
      */
     private $code;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name_report", type="string", length=54, nullable=true)
+     * @ORM\Column(name="name_report", type="string", length=100, nullable=true)
      */
     private $nameReport;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=583, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="url", type="string", length=80, nullable=true)
+     * @ORM\Column(name="url", type="string", length=100, nullable=true)
      */
     private $url;
 
@@ -71,21 +57,21 @@ class Activities
     /**
      * @var string
      *
-     * @ORM\Column(name="business_name", type="string", length=21, nullable=true)
+     * @ORM\Column(name="business_name", type="string", length=100, nullable=true)
      */
     private $businessName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="campaign_ext_id", type="string", length=10, nullable=true)
+     * @ORM\Column(name="campaign_ext_id", type="string", length=100, nullable=true)
      */
     private $campaignExtId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="action_type", type="string", length=23, nullable=true)
+     * @ORM\Column(name="action_type", type="string", length=40, nullable=true)
      */
     private $actionType;
 
@@ -99,42 +85,42 @@ class Activities
     /**
      * @var string
      *
-     * @ORM\Column(name="category", type="string", length=1, nullable=true)
+     * @ORM\Column(name="category", type="string", length=200, nullable=true)
      */
     private $category;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="active", type="integer", nullable=true)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $active;
+    private $active = '1';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="active_start", type="string", length=10, nullable=true)
+     * @ORM\Column(name="active_start", type="datetime", nullable=true)
      */
     private $activeStart;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="active_end", type="string", length=10, nullable=true)
+     * @ORM\Column(name="active_end", type="datetime", nullable=true)
      */
     private $activeEnd;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="created", type="datetime")
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="last_modified", type="datetime")
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -147,55 +133,61 @@ class Activities
      */
     private $id;
 
-
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", mappedBy="activity")
+     */
+    private $application;
 
     /**
-     * Set reportChannelId
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @param integer $reportChannelId
-     *
-     * @return Activities
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\EmailTemplates", inversedBy="activity")
+     * @ORM\JoinTable(name="activity_email_triggers",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="email_template_id", referencedColumnName="id")
+     *   }
+     * )
      */
-    public function setReportChannelId($reportChannelId)
-    {
-        $this->reportChannelId = $reportChannelId;
-
-        return $this;
-    }
+    private $emailTemplate;
 
     /**
-     * Get reportChannelId
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @return integer
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ActivityDataDefs", inversedBy="activity")
+     * @ORM\JoinTable(name="activity_data",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="data_id", referencedColumnName="id")
+     *   }
+     * )
      */
-    public function getReportChannelId()
-    {
-        return $this->reportChannelId;
-    }
+    private $data;
 
     /**
-     * Set reportGroupId
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @param integer $reportGroupId
-     *
-     * @return Activities
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ActivityExportDefs", mappedBy="activity")
      */
-    public function setReportGroupId($reportGroupId)
-    {
-        $this->reportGroupId = $reportGroupId;
-
-        return $this;
-    }
+    private $activityExportDef;
 
     /**
-     * Get reportGroupId
-     *
-     * @return integer
+     * Constructor
      */
-    public function getReportGroupId()
+    public function __construct()
     {
-        return $this->reportGroupId;
+        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->emailTemplate = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->data = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activityExportDef = new \Doctrine\Common\Collections\ArrayCollection();
     }
+
 
     /**
      * Set code
@@ -464,7 +456,7 @@ class Activities
     /**
      * Set active
      *
-     * @param integer $active
+     * @param boolean $active
      *
      * @return Activities
      */
@@ -478,7 +470,7 @@ class Activities
     /**
      * Get active
      *
-     * @return integer
+     * @return boolean
      */
     public function getActive()
     {
@@ -488,7 +480,7 @@ class Activities
     /**
      * Set activeStart
      *
-     * @param string $activeStart
+     * @param \DateTime $activeStart
      *
      * @return Activities
      */
@@ -502,7 +494,7 @@ class Activities
     /**
      * Get activeStart
      *
-     * @return string
+     * @return \DateTime
      */
     public function getActiveStart()
     {
@@ -512,7 +504,7 @@ class Activities
     /**
      * Set activeEnd
      *
-     * @param string $activeEnd
+     * @param \DateTime $activeEnd
      *
      * @return Activities
      */
@@ -526,7 +518,7 @@ class Activities
     /**
      * Get activeEnd
      *
-     * @return string
+     * @return \DateTime
      */
     public function getActiveEnd()
     {
@@ -536,7 +528,7 @@ class Activities
     /**
      * Set created
      *
-     * @param string $created
+     * @param \DateTime $created
      *
      * @return Activities
      */
@@ -550,7 +542,7 @@ class Activities
     /**
      * Get created
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -560,14 +552,13 @@ class Activities
     /**
      * Set lastModified
      *
-     * @param string $lastModified
-     * @ORM\PrePersist()
+     * @param \DateTime $lastModified
      *
      * @return Activities
      */
     public function setLastModified($lastModified)
     {
-        $this->lastModified = new \DateTime();
+        $this->lastModified = $lastModified;
 
         return $this;
     }
@@ -575,9 +566,7 @@ class Activities
     /**
      * Get lastModified
      *
-     * @ORM\PreUpdate()
-     *
-     * @return string
+     * @return \DateTime
      */
     public function getLastModified()
     {
@@ -592,5 +581,141 @@ class Activities
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     *
+     * @return Activities
+     */
+    public function addApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application[] = $application;
+
+        return $this;
+    }
+
+    /**
+     * Remove application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     */
+    public function removeApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application->removeElement($application);
+    }
+
+    /**
+     * Get application
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Add emailTemplate
+     *
+     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     *
+     * @return Activities
+     */
+    public function addEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    {
+        $this->emailTemplate[] = $emailTemplate;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailTemplate
+     *
+     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     */
+    public function removeEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    {
+        $this->emailTemplate->removeElement($emailTemplate);
+    }
+
+    /**
+     * Get emailTemplate
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmailTemplate()
+    {
+        return $this->emailTemplate;
+    }
+
+    /**
+     * Add datum
+     *
+     * @param \AppBundle\Entity\ActivityDataDefs $datum
+     *
+     * @return Activities
+     */
+    public function addDatum(\AppBundle\Entity\ActivityDataDefs $datum)
+    {
+        $this->data[] = $datum;
+
+        return $this;
+    }
+
+    /**
+     * Remove datum
+     *
+     * @param \AppBundle\Entity\ActivityDataDefs $datum
+     */
+    public function removeDatum(\AppBundle\Entity\ActivityDataDefs $datum)
+    {
+        $this->data->removeElement($datum);
+    }
+
+    /**
+     * Get data
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Add activityExportDef
+     *
+     * @param \AppBundle\Entity\ActivityExportDefs $activityExportDef
+     *
+     * @return Activities
+     */
+    public function addActivityExportDef(\AppBundle\Entity\ActivityExportDefs $activityExportDef)
+    {
+        $this->activityExportDef[] = $activityExportDef;
+
+        return $this;
+    }
+
+    /**
+     * Remove activityExportDef
+     *
+     * @param \AppBundle\Entity\ActivityExportDefs $activityExportDef
+     */
+    public function removeActivityExportDef(\AppBundle\Entity\ActivityExportDefs $activityExportDef)
+    {
+        $this->activityExportDef->removeElement($activityExportDef);
+    }
+
+    /**
+     * Get activityExportDef
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivityExportDef()
+    {
+        return $this->activityExportDef;
     }
 }

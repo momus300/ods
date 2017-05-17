@@ -20,16 +20,16 @@ class BrandSets
     private $binCode;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="created", type="string", length=19, nullable=true)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created;
+    private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="last_modified", type="string", length=19, nullable=true)
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -42,6 +42,28 @@ class BrandSets
      */
     private $id;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Brands", inversedBy="brandSet")
+     * @ORM\JoinTable(name="brand_set_brands",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="brand_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $brand;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->brand = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -71,7 +93,7 @@ class BrandSets
     /**
      * Set created
      *
-     * @param string $created
+     * @param \DateTime $created
      *
      * @return BrandSets
      */
@@ -85,7 +107,7 @@ class BrandSets
     /**
      * Get created
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -95,7 +117,7 @@ class BrandSets
     /**
      * Set lastModified
      *
-     * @param string $lastModified
+     * @param \DateTime $lastModified
      *
      * @return BrandSets
      */
@@ -109,7 +131,7 @@ class BrandSets
     /**
      * Get lastModified
      *
-     * @return string
+     * @return \DateTime
      */
     public function getLastModified()
     {
@@ -124,5 +146,39 @@ class BrandSets
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add brand
+     *
+     * @param \AppBundle\Entity\Brands $brand
+     *
+     * @return BrandSets
+     */
+    public function addBrand(\AppBundle\Entity\Brands $brand)
+    {
+        $this->brand[] = $brand;
+
+        return $this;
+    }
+
+    /**
+     * Remove brand
+     *
+     * @param \AppBundle\Entity\Brands $brand
+     */
+    public function removeBrand(\AppBundle\Entity\Brands $brand)
+    {
+        $this->brand->removeElement($brand);
+    }
+
+    /**
+     * Get brand
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBrand()
+    {
+        return $this->brand;
     }
 }

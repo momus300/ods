@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\AuthTypes" table="auth_types">
+    <unique-constraints>
+      <unique-constraint name="type_UNIQUE" columns="type"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="type" type="string" column="type" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="text" column="description" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="isGlobal" type="boolean" column="is_global" nullable="false">
+      <options>
+        <option name="comment">Is auth global affected (to all apps)</option>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="customerField" type="string" column="customer_field" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Name of the field from table customers to pair with code for authentication.</option>
+      </options>
+    </field>
+    <field name="customerFieldRequired" type="boolean" column="customer_field_required" nullable="false">
+      <options>
+        <option name="comment">Is the field from customers table required to pair with code to authenticate?</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="active" type="boolean" column="active" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="application" target-entity="Applications" inversed-by="authType" fetch="LAZY">
+      <join-table name="application_auth_types">
+        <join-columns>
+          <join-column name="auth_type_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="application_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

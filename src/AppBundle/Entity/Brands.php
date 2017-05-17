@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Brands
  *
- * @ORM\Table(name="brands")
+ * @ORM\Table(name="brands", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"code"})})
  * @ORM\Entity
  */
 class Brands
@@ -15,14 +15,14 @@ class Brands
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=11, nullable=true)
+     * @ORM\Column(name="name", type="string", length=20, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=1, nullable=true)
+     * @ORM\Column(name="code", type="string", length=2, nullable=false)
      */
     private $code;
 
@@ -36,28 +36,28 @@ class Brands
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=10, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="is_multi", type="integer", nullable=true)
+     * @ORM\Column(name="is_multi", type="boolean", nullable=false)
      */
-    private $isMulti;
+    private $isMulti = '0';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="created", type="string", length=19, nullable=true)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created;
+    private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="last_modified", type="string", length=19, nullable=true)
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -70,6 +70,36 @@ class Brands
      */
     private $id;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Users", mappedBy="brand")
+     */
+    private $user;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Dealers", mappedBy="brand")
+     */
+    private $dealer;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\BrandSets", mappedBy="brand")
+     */
+    private $brandSet;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dealer = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->brandSet = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -171,7 +201,7 @@ class Brands
     /**
      * Set isMulti
      *
-     * @param integer $isMulti
+     * @param boolean $isMulti
      *
      * @return Brands
      */
@@ -185,7 +215,7 @@ class Brands
     /**
      * Get isMulti
      *
-     * @return integer
+     * @return boolean
      */
     public function getIsMulti()
     {
@@ -195,7 +225,7 @@ class Brands
     /**
      * Set created
      *
-     * @param string $created
+     * @param \DateTime $created
      *
      * @return Brands
      */
@@ -209,7 +239,7 @@ class Brands
     /**
      * Get created
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -219,7 +249,7 @@ class Brands
     /**
      * Set lastModified
      *
-     * @param string $lastModified
+     * @param \DateTime $lastModified
      *
      * @return Brands
      */
@@ -233,7 +263,7 @@ class Brands
     /**
      * Get lastModified
      *
-     * @return string
+     * @return \DateTime
      */
     public function getLastModified()
     {
@@ -248,5 +278,107 @@ class Brands
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add user
+     *
+     * @param \AppBundle\Entity\Users $user
+     *
+     * @return Brands
+     */
+    public function addUser(\AppBundle\Entity\Users $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \AppBundle\Entity\Users $user
+     */
+    public function removeUser(\AppBundle\Entity\Users $user)
+    {
+        $this->user->removeElement($user);
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * Add dealer
+     *
+     * @param \AppBundle\Entity\Dealers $dealer
+     *
+     * @return Brands
+     */
+    public function addDealer(\AppBundle\Entity\Dealers $dealer)
+    {
+        $this->dealer[] = $dealer;
+
+        return $this;
+    }
+
+    /**
+     * Remove dealer
+     *
+     * @param \AppBundle\Entity\Dealers $dealer
+     */
+    public function removeDealer(\AppBundle\Entity\Dealers $dealer)
+    {
+        $this->dealer->removeElement($dealer);
+    }
+
+    /**
+     * Get dealer
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDealer()
+    {
+        return $this->dealer;
+    }
+
+    /**
+     * Add brandSet
+     *
+     * @param \AppBundle\Entity\BrandSets $brandSet
+     *
+     * @return Brands
+     */
+    public function addBrandSet(\AppBundle\Entity\BrandSets $brandSet)
+    {
+        $this->brandSet[] = $brandSet;
+
+        return $this;
+    }
+
+    /**
+     * Remove brandSet
+     *
+     * @param \AppBundle\Entity\BrandSets $brandSet
+     */
+    public function removeBrandSet(\AppBundle\Entity\BrandSets $brandSet)
+    {
+        $this->brandSet->removeElement($brandSet);
+    }
+
+    /**
+     * Get brandSet
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBrandSet()
+    {
+        return $this->brandSet;
     }
 }

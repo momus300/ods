@@ -13,3 +13,9 @@
     <a href="{{ path('ip_addresses') }}"
        class="list-group-item {% if app.request.attributes.get('_route') starts with 'ip_addresses' %}active{% endif %}">Adresy IP</a>
 {% endif %}
+
+
+{% if app.request.attributes.get('_route') starts with 'application' %}
+    <a href="{{ path('application_add') }}"
+       class="list-group-item {% if app.request.attributes.get('_route') starts with 'application_add' %}active{% endif %}">Dodaj aplikacje</a>
+{% endif %}

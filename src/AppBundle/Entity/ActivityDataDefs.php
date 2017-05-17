@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ActivityDataDefs
  *
- * @ORM\Table(name="activity_data_defs")
+ * @ORM\Table(name="activity_data_defs", uniqueConstraints={@ORM\UniqueConstraint(name="ind_name", columns={"name"})})
  * @ORM\Entity
  */
 class ActivityDataDefs
@@ -15,42 +15,42 @@ class ActivityDataDefs
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=27, nullable=true)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="string", length=231, nullable=true)
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
-     * @var integer
+     * @var boolean
      *
-     * @ORM\Column(name="optout_delete", type="integer", nullable=true)
+     * @ORM\Column(name="optout_delete", type="boolean", nullable=false)
      */
-    private $optoutDelete;
+    private $optoutDelete = '0';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=7, nullable=true)
+     * @ORM\Column(name="type", type="string", length=20, nullable=false)
      */
-    private $type;
+    private $type = 'string';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="created", type="string", length=19, nullable=true)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created;
+    private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="last_modified", type="string", length=19, nullable=true)
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -63,6 +63,20 @@ class ActivityDataDefs
      */
     private $id;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", mappedBy="data")
+     */
+    private $activity;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -116,7 +130,7 @@ class ActivityDataDefs
     /**
      * Set optoutDelete
      *
-     * @param integer $optoutDelete
+     * @param boolean $optoutDelete
      *
      * @return ActivityDataDefs
      */
@@ -130,7 +144,7 @@ class ActivityDataDefs
     /**
      * Get optoutDelete
      *
-     * @return integer
+     * @return boolean
      */
     public function getOptoutDelete()
     {
@@ -164,7 +178,7 @@ class ActivityDataDefs
     /**
      * Set created
      *
-     * @param string $created
+     * @param \DateTime $created
      *
      * @return ActivityDataDefs
      */
@@ -178,7 +192,7 @@ class ActivityDataDefs
     /**
      * Get created
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -188,7 +202,7 @@ class ActivityDataDefs
     /**
      * Set lastModified
      *
-     * @param string $lastModified
+     * @param \DateTime $lastModified
      *
      * @return ActivityDataDefs
      */
@@ -202,7 +216,7 @@ class ActivityDataDefs
     /**
      * Get lastModified
      *
-     * @return string
+     * @return \DateTime
      */
     public function getLastModified()
     {
@@ -217,5 +231,39 @@ class ActivityDataDefs
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     *
+     * @return ActivityDataDefs
+     */
+    public function addActivity(\AppBundle\Entity\Activities $activity)
+    {
+        $this->activity[] = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Remove activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     */
+    public function removeActivity(\AppBundle\Entity\Activities $activity)
+    {
+        $this->activity->removeElement($activity);
+    }
+
+    /**
+     * Get activity
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivity()
+    {
+        return $this->activity;
     }
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ImportActivities" table="import_activities">
+    <indexes>
+      <index name="fk_activities_report_channel1_idx" columns="report_channel_id"/>
+      <index name="fk_activities_report_group1_idx" columns="report_group_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="code_UNIQUE" columns="code"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="reportChannelId" type="integer" column="report_channel_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="reportGroupId" type="integer" column="report_group_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="code" type="string" column="code" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="nameReport" type="string" column="name_report" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="text" column="description" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="url" type="string" column="url" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="actionName" type="string" column="action_name" length="60" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="businessName" type="string" column="business_name" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="campaignExtId" type="string" column="campaign_ext_id" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="actionType" type="string" column="action_type" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Type action:  OF - check offer  JP - test drive  OF_JP - both Serwis - service  formFlota_JP - flota test drive Flota_kontakt - contact form (flota) Flota_kontakt_skr - soft contact form (flota)</option>
+      </options>
+    </field>
+    <field name="channel" type="integer" column="channel" nullable="true">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">Distribution channel of form: 0 - Internet 1 - Event 2 - emailing 3 - Ipad 4 - callcenter, 5 - mobile, 6 - letter, 7 - tv</option>
+        <option name="default">2</option>
+      </options>
+    </field>
+    <field name="active" type="boolean" column="active" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+  </entity>
+</doctrine-mapping>

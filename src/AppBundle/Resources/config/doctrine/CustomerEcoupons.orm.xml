@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CustomerEcoupons" table="customer_ecoupons">
+    <indexes>
+      <index name="fk_customers_has_ecoupons_ecoupons1_idx" columns="ecoupon_id"/>
+      <index name="fk_customers_has_ecoupons_customers1_idx" columns="customer_id"/>
+      <index name="fk_customer_ecoupons_cc_configurations1_idx" columns="cc_configuration_id"/>
+    </indexes>
+    <id name="customer" association-key="true"/>
+    <id name="ecoupon" association-key="true"/>
+    <field name="choice" type="integer" column="choice" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">Chosen variant of ecoupon
+0 - not chosen
+1 - product</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <one-to-one field="ecoupon" target-entity="Ecoupons" fetch="LAZY">
+      <join-columns>
+        <join-column name="ecoupon_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="customer" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <many-to-one field="ccConfiguration" target-entity="CcConfigurations" fetch="LAZY">
+      <join-columns>
+        <join-column name="cc_configuration_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

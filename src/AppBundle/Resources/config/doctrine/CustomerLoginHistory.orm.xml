@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\CustomerLoginHistory" table="customer_login_history">
+    <indexes>
+      <index name="fk_customer_login_history_customers1_idx" columns="customer_id"/>
+      <index name="fk_customer_login_history_application_auth_types1_idx" columns="auth_type_id,application_id"/>
+      <index name="fk_customer_login_history_sessions1_idx" columns="session_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="extIp" type="string" column="ext_ip" length="15" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="purl" type="string" column="purl" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="customer" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="authType" target-entity="ApplicationAuthTypes" fetch="LAZY">
+      <join-columns>
+        <join-column name="auth_type_id" referenced-column-name="auth_type_id"/>
+        <join-column name="application_id" referenced-column-name="application_id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="session" target-entity="Sessions" fetch="LAZY">
+      <join-columns>
+        <join-column name="session_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

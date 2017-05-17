@@ -56,6 +56,44 @@ class ActivityExportDefs
      */
     private $id;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", inversedBy="activityExportDef")
+     * @ORM\JoinTable(name="activity_export_def_application",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $application;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", inversedBy="activityExportDef")
+     * @ORM\JoinTable(name="activity_export_def_activity",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $activity;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
@@ -186,5 +224,73 @@ class ActivityExportDefs
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Add application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     *
+     * @return ActivityExportDefs
+     */
+    public function addApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application[] = $application;
+
+        return $this;
+    }
+
+    /**
+     * Remove application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     */
+    public function removeApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application->removeElement($application);
+    }
+
+    /**
+     * Get application
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getApplication()
+    {
+        return $this->application;
+    }
+
+    /**
+     * Add activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     *
+     * @return ActivityExportDefs
+     */
+    public function addActivity(\AppBundle\Entity\Activities $activity)
+    {
+        $this->activity[] = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Remove activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     */
+    public function removeActivity(\AppBundle\Entity\Activities $activity)
+    {
+        $this->activity->removeElement($activity);
+    }
+
+    /**
+     * Get activity
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivity()
+    {
+        return $this->activity;
     }
 }

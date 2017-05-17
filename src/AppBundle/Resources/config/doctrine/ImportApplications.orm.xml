@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ImportApplications" table="import_applications">
+    <indexes>
+      <index name="ind_active_start_end" columns="active,active_start,active_end"/>
+      <index name="fk_applications_brand_sets1_idx" columns="brand_set_id"/>
+      <index name="fk_applications_campaigns1_idx" columns="campaign_id"/>
+      <index name="fk_applications_comapnies1_idx" columns="company_id"/>
+      <index name="fk_applications_report_areas1_idx" columns="report_area_id"/>
+      <index name="fk_applications_report_category1_idx" columns="report_category_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="code_UNIQUE" columns="app_id"/>
+      <unique-constraint name="public_key_UNIQUE" columns="public_key"/>
+      <unique-constraint name="admin_key_UNIQUE" columns="admin_key"/>
+      <unique-constraint name="application_id_brand_set_id" columns="id,brand_set_id"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="brandSetId" type="integer" column="brand_set_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="companyId" type="integer" column="company_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="reportAreaId" type="integer" column="report_area_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="reportCategoryId" type="integer" column="report_category_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="campaignId" type="integer" column="campaign_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="50" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="text" column="description" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="appId" type="string" column="app_id" length="10" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="publicKey" type="string" column="public_key" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="adminKey" type="string" column="admin_key" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="dataSourceId" type="string" column="data_source_id" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="order" type="integer" column="order" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="active" type="boolean" column="active" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="linkedAppLoginUrl" type="string" column="linked_app_login_url" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+  </entity>
+</doctrine-mapping>

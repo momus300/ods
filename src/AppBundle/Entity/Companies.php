@@ -15,42 +15,42 @@ class Companies
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=40, nullable=true)
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="contact_person", type="string", length=23, nullable=true)
+     * @ORM\Column(name="contact_person", type="string", length=60, nullable=false)
      */
     private $contactPerson;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=35, nullable=true)
+     * @ORM\Column(name="email", type="string", length=80, nullable=false)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="phone", type="string", length=17, nullable=true)
+     * @ORM\Column(name="phone", type="string", length=20, nullable=false)
      */
     private $phone;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="created", type="string", length=19, nullable=true)
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created;
+    private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="last_modified", type="string", length=19, nullable=true)
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
@@ -164,7 +164,7 @@ class Companies
     /**
      * Set created
      *
-     * @param string $created
+     * @param \DateTime $created
      *
      * @return Companies
      */
@@ -178,7 +178,7 @@ class Companies
     /**
      * Get created
      *
-     * @return string
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -188,7 +188,7 @@ class Companies
     /**
      * Set lastModified
      *
-     * @param string $lastModified
+     * @param \DateTime $lastModified
      *
      * @return Companies
      */
@@ -202,7 +202,7 @@ class Companies
     /**
      * Get lastModified
      *
-     * @return string
+     * @return \DateTime
      */
     public function getLastModified()
     {

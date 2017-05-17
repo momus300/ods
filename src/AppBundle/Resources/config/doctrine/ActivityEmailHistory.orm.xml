@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ActivityEmailHistory" table="activity_email_history">
+    <indexes>
+      <index name="fk_activities_has_email_templates_email_templates2_idx" columns="template_id"/>
+      <index name="fk_activities_has_email_templates_activities2_idx" columns="activity_id"/>
+      <index name="ind_status" columns="status"/>
+      <index name="token_index" columns="token"/>
+      <index name="receiver_email" columns="receiver_email"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="senderEmail" type="string" column="sender_email" length="80" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="senderName" type="string" column="sender_name" length="250" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="receiverEmail" type="string" column="receiver_email" length="80" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="subject" type="text" column="subject" length="65535" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="contentText" type="text" column="content_text" length="65535" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Text content</option>
+      </options>
+    </field>
+    <field name="contentHtml" type="text" column="content_html" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">HTML content</option>
+      </options>
+    </field>
+    <field name="sent" type="datetime" column="sent" nullable="false"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="token" type="string" column="token" length="64" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="data" type="text" column="data" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="status" type="integer" column="status" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">-1</option>
+      </options>
+    </field>
+    <many-to-one field="template" target-entity="EmailTemplates" fetch="LAZY">
+      <join-columns>
+        <join-column name="template_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="activity" target-entity="Activities" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

@@ -34,3 +34,7 @@ activity_export:
 activity_add:
   path:     /aktywnosc/dodaj
   defaults: { _controller: AppBundle:Panel:activityAdd }
+
+application_add:
+  path:     /aplikacja/dodaj
+  defaults: { _controller: AppBundle:Panel:applicationAdd }

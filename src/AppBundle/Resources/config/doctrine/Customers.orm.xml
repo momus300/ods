@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Customers" table="customers">
+    <indexes>
+      <index name="purl_idx" columns="purl"/>
+      <index name="company_idx" columns="company"/>
+      <index name="nip_idx" columns="nip"/>
+      <index name="import_id" columns="import_id"/>
+      <index name="ck_customer_id" columns="ck_customer_id"/>
+      <index name="cellphone" columns="cellphone"/>
+      <index name="skoda_id" columns="skoda_id"/>
+      <index name="email" columns="email"/>
+      <index name="fk_customers_brand_sets1_idx" columns="brand_set_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="customer_id_brand_set_id" columns="id,brand_set_id"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="fname" type="string" column="fname" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">First name</option>
+      </options>
+    </field>
+    <field name="mname" type="string" column="mname" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Middle name</option>
+      </options>
+    </field>
+    <field name="lname" type="string" column="lname" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Last name</option>
+      </options>
+    </field>
+    <field name="purl" type="string" column="purl" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="gender" type="string" column="gender" length="1" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">M - male
+F - female</option>
+      </options>
+    </field>
+    <field name="email" type="string" column="email" length="80" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="isValidEmail" type="boolean" column="is_valid_email" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="cellphone" type="string" column="cellphone" length="9" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="phone" type="string" column="phone" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="skodaId" type="string" column="skoda_id" length="17" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="ckCustomerId" type="integer" column="ck_customer_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="leadStatus" type="boolean" column="lead_status" nullable="false">
+      <options>
+        <option name="comment">0 - lead only,1 - prospect, 2 - client</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="active" type="boolean" column="active" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="birthday" type="datetime" column="birthday" nullable="true"/>
+    <field name="country" type="string" column="country" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="city" type="string" column="city" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="post" type="string" column="post" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="zipcode" type="string" column="zipcode" length="6" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="addressType" type="string" column="address_type" length="5" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Type of address: NULL, ul., pl., al., os.</option>
+      </options>
+    </field>
+    <field name="street" type="string" column="street" length="80" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="streetNo" type="string" column="street_no" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="flatNo" type="string" column="flat_no" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="type" type="integer" column="type" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">Type of client:
+0 - a private person
+1 - a business contact
+2 - own business</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="agreeMarketing" type="integer" column="agree_marketing" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="lastLoggedin" type="datetime" column="last_loggedin" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <field name="nip" type="string" column="nip" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="company" type="string" column="company" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyAddressType" type="string" column="company_address_type" length="5" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyStreet" type="string" column="company_street" length="80" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyStreetNo" type="string" column="company_street_no" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyFlatNo" type="string" column="company_flat_no" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyZipcode" type="string" column="company_zipcode" length="6" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyCity" type="string" column="company_city" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyPhone" type="string" column="company_phone" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyCellphone" type="string" column="company_cellphone" length="9" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyEmail" type="string" column="company_email" length="80" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="companyRegon" type="string" column="company_regon" length="14" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="internalNotes" type="string" column="internal_notes" length="250" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="importId" type="integer" column="import_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="test" type="integer" column="test" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <many-to-one field="brandSet" target-entity="BrandSets" fetch="LAZY">
+      <join-columns>
+        <join-column name="brand_set_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="authType" target-entity="ApplicationAuthTypes" mapped-by="customer" fetch="LAZY"/>
+    <many-to-many field="campaign" target-entity="Campaigns" mapped-by="customer" fetch="LAZY"/>
+  </entity>
+</doctrine-mapping>

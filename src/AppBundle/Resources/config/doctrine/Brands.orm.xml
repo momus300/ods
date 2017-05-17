@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="AppBundle\Entity\Brands" table="brands">
+    <unique-constraints>
+      <unique-constraint name="code_UNIQUE" columns="code"/>
+    </unique-constraints>
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
-    <field name="name" type="string" column="name" length="11" nullable="true">
+    <field name="name" type="string" column="name" length="20" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="code" type="string" column="code" length="1" nullable="true">
+    <field name="code" type="string" column="code" length="2" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
@@ -17,27 +20,28 @@
     <field name="binCode" type="integer" column="bin_code" nullable="true">
       <options>
         <option name="unsigned"/>
+        <option name="comment">Kod binarny 2^n.
+Wymaga dodania triggera.</option>
       </options>
     </field>
-    <field name="description" type="string" column="description" length="10" nullable="true">
+    <field name="description" type="text" column="description" length="65535" nullable="true">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="isMulti" type="integer" column="is_multi" nullable="true">
+    <field name="isMulti" type="boolean" column="is_multi" nullable="false">
       <options>
-        <option name="unsigned"/>
+        <option name="default">0</option>
       </options>
     </field>
-    <field name="created" type="string" column="created" length="19" nullable="true">
+    <field name="created" type="datetime" column="created" nullable="false">
       <options>
-        <option name="fixed"/>
+        <option name="default">CURRENT_TIMESTAMP</option>
       </options>
     </field>
-    <field name="lastModified" type="string" column="last_modified" length="19" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="user" target-entity="Users" mapped-by="brand" fetch="LAZY"/>
+    <many-to-many field="dealer" target-entity="Dealers" mapped-by="brand" fetch="LAZY"/>
+    <many-to-many field="brandSet" target-entity="BrandSets" mapped-by="brand" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

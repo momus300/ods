@@ -5,9 +5,11 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Activities;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
+use AppBundle\Utils\PasswordGenerator;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -61,7 +63,7 @@ class PanelController extends Controller
                 'TV'
             ])])
             ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
-            ->add('save', SubmitType::class, ['label' => 'Dodaj'])
+            ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']])
             ->getForm();
 
         $form->handleRequest($request);
@@ -162,6 +164,53 @@ class PanelController extends Controller
 //            die();
         }
         return $this->render('@App/panel/activity-export.html.twig', ['activities' => $activities, 'activityExport' => $activityExport]);
+    }
+
+    public function applicationAddAction(Request $request)
+    {
+        $generator = $this->get('app.password_generator');
+
+        $brands = $this->getDoctrine()->getRepository('AppBundle:Brands')->findAll();
+
+        $application = new Applications();
+        $application->setPublicKey($generator->generate()->getPassword());
+        $application->setAdminKey($generator->generate()->getPassword());
+
+        /** @var Form $form */
+        $form = $this->createFormBuilder($application)
+            ->add('brand_set', ChoiceType::class)
+            ->add('company', EntityType::class, [
+                'choice_label' => 'name',
+                'class' => 'AppBundle:Brands'
+            ])
+            ->add('name', TextType::class)
+            ->add('description', TextType::class)
+            ->add('appId', TextType::class)
+            ->add('order', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
+            ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
+            ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            dump($data);
+            die();
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($data);
+            $em->flush();
+
+            $this->addFlash('success', 'Formularz został dodany.');
+
+            return $this->redirectToRoute('activity_data');
+        }
+
+        return $this->render('@App/panel/activity-add.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     public function ipAddressAddAction($ip)
