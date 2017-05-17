@@ -3,5 +3,34 @@ panel:
   defaults: { _controller: AppBundle:Panel:show }
 
 activities:
-  path:     /activities
+  path:     /aktywnosci
   defaults: { _controller: AppBundle:Panel:activities }
+
+ip_addresses:
+  path:     /adresy-ip
+  defaults: { _controller: AppBundle:Panel:ipAddresses }
+
+ip_address_delete:
+  path:     /adresy-ip/usun/{id}
+  defaults: { _controller: AppBundle:Panel:ipAddressDelete }
+
+
+ip_address_add:
+  path:     /adresy-ip/dodaj/{id}
+  defaults: { _controller: AppBundle:Panel:ipAddressAdd }
+
+activity_data:
+  path:     /aktywnosc-dane
+  defaults: { _controller: AppBundle:Panel:activityData }
+
+#activity_data_id:
+#  path:     /aktywnosc/dane/{activity_id}
+#  defaults: { _controller: AppBundle:Panel:activityData }
+
+activity_export:
+  path:     /aktywnosc-eksport
+  defaults: { _controller: AppBundle:Panel:activityExport }
+
+activity_add:
+  path:     /aktywnosc/dodaj
+  defaults: { _controller: AppBundle:Panel:activityAdd }

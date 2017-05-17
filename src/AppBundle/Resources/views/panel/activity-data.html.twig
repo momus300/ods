@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+
+        <form class="form-inline" action="" method="post">
+
+            <div class="col-md-10">
+                <select name="activity_id" class="form-control selectpicker" data-live-search="true">
+                    {% for activity in activities %}
+                        <option value="{{ activity.id }}">{{ activity.code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <h2>Lista pol dla aktywnosci id: {{ app.request.get('activity_id') }}</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Nazwa</th>
+                <th>Opis</th>
+                <th>Wymagane</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in activityData if activityData %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ data.name }}</td>
+                    <td>{{ data.description }}</td>
+                    <td>{{ data.required ? 'tak' : 'nie' }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

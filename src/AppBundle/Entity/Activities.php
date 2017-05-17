@@ -127,14 +127,14 @@ class Activities
     /**
      * @var string
      *
-     * @ORM\Column(name="created", type="string", length=19, nullable=true)
+     * @ORM\Column(name="created", type="datetime")
      */
     private $created;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="last_modified", type="string", length=19, nullable=true)
+     * @ORM\Column(name="last_modified", type="datetime")
      */
     private $lastModified;
 
@@ -561,18 +561,21 @@ class Activities
      * Set lastModified
      *
      * @param string $lastModified
+     * @ORM\PrePersist()
      *
      * @return Activities
      */
     public function setLastModified($lastModified)
     {
-        $this->lastModified = $lastModified;
+        $this->lastModified = new \DateTime();
 
         return $this;
     }
 
     /**
      * Get lastModified
+     *
+     * @ORM\PreUpdate()
      *
      * @return string
      */

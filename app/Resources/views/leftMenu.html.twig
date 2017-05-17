@@ -1,0 +1,15 @@
+{% if app.request.attributes.get('_route') starts with 'activity' %}
+    <a href="{{ path('activity_data') }}"
+       class="list-group-item {% if app.request.attributes.get('_route') starts with 'activity_data' %}active{% endif %}">Pola
+        aktywnosci</a>
+    <a href="{{ path('activity_export') }}"
+       class="list-group-item {% if app.request.attributes.get('_route') starts with 'activity_export' %}active{% endif %}">Eksport
+        aktywnosci</a>
+    <a href="{{ path('activity_add') }}"
+       class="list-group-item {% if app.request.attributes.get('_route') starts with 'activity_add' %}active{% endif %}">Dodaj aktywnosc (formularz)</a>
+{% endif %}
+
+{% if app.request.attributes.get('_route') starts with 'ip' %}
+    <a href="{{ path('ip_addresses') }}"
+       class="list-group-item {% if app.request.attributes.get('_route') starts with 'ip_addresses' %}active{% endif %}">Adresy IP</a>
+{% endif %}

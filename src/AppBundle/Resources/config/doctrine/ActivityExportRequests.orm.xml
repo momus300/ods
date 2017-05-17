@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ActivityExportRequests" table="activity_export_requests">
+    <indexes>
+      <index name="fk_activity_export_applications1_idx" columns="application_id"/>
+      <index name="fk_activity_export_activity_export_defs1_idx" columns="activity_export_def_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="reason" type="string" column="reason" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default">Zaplanowany eksport danych</option>
+      </options>
+    </field>
+    <field name="extIp" type="string" column="ext_ip" length="15" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="status" type="integer" column="status" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">Request status: -2 - failed, -1 - canceled, 0 - unconfirmed, 1 - confirmed</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="confirmToken" type="string" column="confirm_token" length="32" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="application" target-entity="Applications" fetch="LAZY">
+      <join-columns>
+        <join-column name="application_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="activityExportDef" target-entity="ActivityExportDefs" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_export_def_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

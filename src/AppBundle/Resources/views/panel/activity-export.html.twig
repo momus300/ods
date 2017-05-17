@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block leftMenu %}
+    {% include 'leftMenu.html.twig' %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+        <form class="form-inline" action="" method="post">
+
+            <div class="col-md-10">
+                <select name="activity_id" class="form-control selectpicker" data-live-search="true">
+                    {% for activity in activities %}
+                        <option value="{{ activity.id }}">{{ activity.code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <h2>Lista pol dla aktywnosci id: {{ app.request.get('activity_id') }}</h2>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Kod</th>
+                <th>Nazwa</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for data in activityExport if activityExport %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ data.code }}</td>
+                    <td>{{ data.name}}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+

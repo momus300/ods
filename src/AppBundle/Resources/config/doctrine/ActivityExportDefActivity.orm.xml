@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ActivityExportDefActivity" table="activity_export_def_activity">
+    <indexes>
+      <index name="fk_activity_export_defs_application_activities_activity_exp_idx" columns="activity_export_def_id"/>
+      <index name="fk_activity_export_def_activity_activities1_idx" columns="activity_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="activityExportDef" target-entity="ActivityExportDefs" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_export_def_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="activity" target-entity="Activities" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
