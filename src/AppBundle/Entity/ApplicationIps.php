@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * ApplicationIps
  *
  * @ORM\Table(name="application_ips", indexes={@ORM\Index(name="IDX_D04BA5593E030ACD", columns={"application_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ApplicationIpsRepository")
  */
 class ApplicationIps
 {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="AppBundle\Entity\ApplicationIps" table="application_ips">
+  <entity repository-class="AppBundle\Entity\ApplicationIpsRepository" name="AppBundle\Entity\ApplicationIps" table="application_ips">
     <indexes>
       <index name="IDX_D04BA5593E030ACD" columns="application_id"/>
     </indexes>

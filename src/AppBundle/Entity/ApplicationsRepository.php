@@ -12,36 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class ApplicationsRepository extends EntityRepository
 {
-//    public function getDataCsvForAgency($id)
-//    {
-//        return $this->createQueryBuilder('app')
-//            ->select('app, act, actd')
-//            ->innerJoin('app.activity', 'act')
-//            ->innerJoin('act.data', 'actd')
-//            ->where('app.id = :id')
-//            ->setParameter('id', $id)
-//            ->getQuery()
-//            ->getOneOrNullResult();
-//
-//
-//
-////        return $this->getEntityManager()
-////            ->createQuery('
-////SELECT
-////app.id as application_id, app.app_id, app.public_key as app_key, app.name as app_name, act.id as activity_id, act.code as activity_code, act.name as activity_name, act.action_name, actd.data_id as activity_data_id,
-////actdd.name as activity_data_name, \'crm_code?\', actdd.description as activity_dta_description, actd.required activity_data_required
-////FROM AppBundle:Applications app
-////JOIN AppBundle:ApplicationActi aa ON app.id = aa.application_id
-////JOIN activities act ON aa.activity_id = act.id
-////JOIN activity_data actd ON act.id = actd.activity_id
-////JOIN activity_data_defs actdd ON actd.data_id = actdd.id
-////WHERE app.id = :id
-////
-////SELECT app
-////FROM AppBundle:Applications app
-////WHERE app.id = :id
-////')
-////            ->setParameter('id', $id)
-////            ->getResult();
-//    }
+    public function getLastOfAgency(Companies $company)
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a')
+            ->where('a.company = :company')
+            ->setParameter('company', $company->getId())
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult()
+        ;
+    }
 }

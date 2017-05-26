@@ -179,9 +179,8 @@ class PanelController extends Controller
 
     public function applicationAddAction(Request $request)
     {
-        $generator = $this->get('app.password_generator');
 
-//        $brands = $this->getDoctrine()->getRepository('AppBundle:Brands')->findAll();
+        $generator = $this->get('app.password_generator');
 
         $application = new Applications();
         $application->setPublicKey($generator->generate()->getPassword());
@@ -193,9 +192,15 @@ class PanelController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             echo $form->get('copyIps')->getData();
+            /** @var Applications $data */
             $data = $form->getData();
 
-            dump($data);
+            $company = $data->getCompany();
+//            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->getLastOfAgency($company);
+            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->findOneBy(['company' => $company], ['id' => 'DESC']);
+            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:ApplicationIps')->findBy(['application' => $lastApplication]);
+
+            dump($lastApplication);
             die();
 
             $em = $this->getDoctrine()->getManager();
