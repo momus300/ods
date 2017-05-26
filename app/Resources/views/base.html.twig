@@ -26,15 +26,7 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li>
-                        <a href="{{ path('ip_addresses') }}">Adresy IP</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('application_add') }}">Aplikacje</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('activity_data') }}">Aktywnosci</a>
-                    </li>
+                    {% include 'topMenu.html.twig' %}
                 </ul>
             </div>
         </div>

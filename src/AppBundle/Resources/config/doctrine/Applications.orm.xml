@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity name="AppBundle\Entity\Applications" table="applications">
+  <entity repository-class="AppBundle\Entity\ApplicationsRepository" name="AppBundle\Entity\Applications" table="applications">
     <indexes>
       <index name="ind_active_start_end" columns="active,active_start,active_end"/>
       <index name="fk_applications_campaigns" columns="campaign_id"/>
@@ -66,11 +66,7 @@
         <option name="fixed"/>
       </options>
     </field>
-    <field name="created" type="datetime" column="created" nullable="false">
-      <options>
-        <option name="default">CURRENT_TIMESTAMP</option>
-      </options>
-    </field>
+    <field name="created" type="datetime" column="created" nullable="false" />
     <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
     <many-to-one field="campaign" target-entity="Campaigns" fetch="LAZY">
       <join-columns>

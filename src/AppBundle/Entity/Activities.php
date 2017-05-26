@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Activities
  *
  * @ORM\Table(name="activities", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"code"})}, indexes={@ORM\Index(name="report_channel_id", columns={"report_channel_id"}), @ORM\Index(name="report_group_id", columns={"report_group_id"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\ActivitiesRepository")
  */
 class Activities
 {

@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block leftMenu %}
-    {% include 'leftMenu.html.twig' %}
-{% endblock %}
-
 {% block body %}
     <div class="row">
 
@@ -38,7 +34,8 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ appIp.ip }}</td>
                     <td class="text-right">
-                        <a href="{{ path('ip_address_delete', {'id': appIp.id}) }}" class="btn btn-danger">Usuń</a>
+                        {#{{ dump(appIp) }}#}
+                        {#<a href="{{ path('ip_address_delete', {'application': appIp.application, 'appIp': appIp.ip}) }}" class="btn btn-danger">Usuń</a>#}
                     </td>
                 </tr>
             {% endfor %}
@@ -47,7 +44,7 @@
         <form class="form-inline" action="" method="post">
             <input type="text" name="address_ip" />
 
-            <a href="{{ path('ip_address_delete', {'id': 3}) }}" class="btn btn-success">Dodaj</a>
+            <a href="{{ path('ip_address_add', {'id': 3}) }}" class="btn btn-success">Dodaj</a>
         </form>
     </div>
 {% endblock %}

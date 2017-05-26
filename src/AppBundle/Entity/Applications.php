@@ -94,7 +94,7 @@ class Applications
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
      * @var \DateTime
@@ -449,13 +449,13 @@ class Applications
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @ORM\PrePersist()
      *
      * @return Applications
      */
-    public function setCreated($created)
+    public function setCreated()
     {
-        $this->created = $created;
+        $this->created = new \DateTime();
 
         return $this;
     }
@@ -473,13 +473,13 @@ class Applications
     /**
      * Set lastModified
      *
-     * @param \DateTime $lastModified
+     * @ORM\PreUpdate()
      *
      * @return Applications
      */
-    public function setLastModified($lastModified)
+    public function setLastModified()
     {
-        $this->lastModified = $lastModified;
+        $this->lastModified = new \DateTime();
 
         return $this;
     }

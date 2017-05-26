@@ -6,18 +6,23 @@ activities:
   path:     /aktywnosci
   defaults: { _controller: AppBundle:Panel:activities }
 
+#adresy IP
+
 ip_addresses:
   path:     /adresy-ip
   defaults: { _controller: AppBundle:Panel:ipAddresses }
 
 ip_address_delete:
-  path:     /adresy-ip/usun/{id}
+  path:     /adresy-ip/usun
+  methods: [post]
   defaults: { _controller: AppBundle:Panel:ipAddressDelete }
 
 
 ip_address_add:
   path:     /adresy-ip/dodaj/{id}
   defaults: { _controller: AppBundle:Panel:ipAddressAdd }
+
+#Aktywnosc
 
 activity_data:
   path:     /aktywnosc-dane
@@ -35,6 +40,18 @@ activity_add:
   path:     /aktywnosc/dodaj
   defaults: { _controller: AppBundle:Panel:activityAdd }
 
+#aplikacja
+
+application_generate_codes:
+  path:     /aplikacja/generuj-kody
+  defaults: { _controller: AppBundle:Panel:generateCodes }
+
 application_add:
   path:     /aplikacja/dodaj
   defaults: { _controller: AppBundle:Panel:applicationAdd }
+
+#Dokumenty
+
+documents_for_agency:
+  path:     /dokumenty
+  defaults: { _controller: AppBundle:Panel:documents }

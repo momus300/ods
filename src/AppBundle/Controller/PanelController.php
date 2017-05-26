@@ -3,20 +3,31 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Activities;
+use AppBundle\Entity\ActivityDataDefs;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
+use AppBundle\Entity\BrandSets;
+use AppBundle\Form\ApplicationsType;
+use AppBundle\Utils\CsvExport;
 use AppBundle\Utils\PasswordGenerator;
+use Doctrine\DBAL\Types\BooleanType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 class PanelController extends Controller
 {
@@ -170,42 +181,30 @@ class PanelController extends Controller
     {
         $generator = $this->get('app.password_generator');
 
-        $brands = $this->getDoctrine()->getRepository('AppBundle:Brands')->findAll();
+//        $brands = $this->getDoctrine()->getRepository('AppBundle:Brands')->findAll();
 
         $application = new Applications();
         $application->setPublicKey($generator->generate()->getPassword());
         $application->setAdminKey($generator->generate()->getPassword());
 
-        /** @var Form $form */
-        $form = $this->createFormBuilder($application)
-            ->add('brand_set', ChoiceType::class)
-            ->add('company', EntityType::class, [
-                'choice_label' => 'name',
-                'class' => 'AppBundle:Brands'
-            ])
-            ->add('name', TextType::class)
-            ->add('description', TextType::class)
-            ->add('appId', TextType::class)
-            ->add('order', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
-            ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
-            ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']])
-            ->getForm();
+        $form = $this->createForm(ApplicationsType::class, $application);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            echo $form->get('copyIps')->getData();
             $data = $form->getData();
 
             dump($data);
             die();
 
             $em = $this->getDoctrine()->getManager();
-            $em->persist($data);
-            $em->flush();
+//            $em->persist($data);
+//            $em->flush();
 
-            $this->addFlash('success', 'Formularz został dodany.');
+            $this->addFlash('success', 'Aplikacja została dodana.');
 
-            return $this->redirectToRoute('activity_data');
+            return $this->redirectToRoute('application_add');
         }
 
         return $this->render('@App/panel/activity-add.html.twig', [
@@ -213,14 +212,57 @@ class PanelController extends Controller
         ]);
     }
 
+    public function documentsAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repository = $em->getRepository('AppBundle:Activities');
+        $activities = $repository->findAll();
+
+        if ($request->isMethod('post')) {
+            $paramId = $request->get('activity_id');
+            /** @var Activities $activity */
+            $activity = $repository->find($paramId);
+            /** @var Applications $application */
+            $application = $activity->getApplication()->get(0);
+            /** @var ActivityDataDefs $data */
+
+            $fileName = sprintf('%s.csv', $application->getAppId());
+
+            $content = (new CsvExport($application, $activity))
+                ->getFileContent();
+
+            return new Response($content, 200, [
+                'Content-Encoding' => 'UTF-8 BOM',
+                'charset' => 'UTF-8 BOM',
+                'X-Sendfile' => $fileName,
+                'Content-type' => 'text/csv',
+                'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName)
+            ]);
+        }
+
+        return $this->render('@App/panel/documents-for-agency.html.twig', ['activities' => $activities]);
+    }
+
+    public function generateCodesAction()
+    {
+        $generator = $this->get('app.password_generator');
+        $passwords['admin'] = $generator->generate()->getPassword();
+        $passwords['public'] = $generator->generate()->getPassword();
+
+        return $this->render('@App/panel/generata-password.html.twig', ['passwords' => $passwords]);
+    }
+
     public function ipAddressAddAction($ip)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $aplicationIp = $em->getRepository('AppBundle:Applications')->find();
 
         $aplicationIp = new ApplicationIps();
         $aplicationIp->setIp($ip);
         $aplicationIp->setApplication($aplicationIp);
+
+        dump($aplicationIp);
+        die();
 
         $em->persist($aplicationIp);
         $em->flush();
@@ -231,7 +273,7 @@ class PanelController extends Controller
 
     public function ipAddressDeleteAction(Request $request, $id)
     {
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $aplicationIp = $em->getRepository('AppBundle:ApplicationIps')->find($id);
 
         $this->addFlash('success', 'Rekord ' . $aplicationIp->getIp() . ' został usunięty.');
