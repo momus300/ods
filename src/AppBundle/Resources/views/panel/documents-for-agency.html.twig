@@ -5,7 +5,7 @@
 
         <form class="form-inline" action="" method="post">
 
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <select name="activity_id" class="form-control selectpicker" data-live-search="true">
                     {% for activity in activities %}
                         <option value="{{ activity.id }}">{{ activity.code }} - {{ activity.name }}</option>
@@ -13,7 +13,10 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Pobierz CSV</button>
+                <button type="submit" name="download_csv" class="btn btn-primary">CSV dla agnecji</button>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" name="download_log_requests" class="btn btn-info">Log requestów</button>
             </div>
         </form>
     </div>

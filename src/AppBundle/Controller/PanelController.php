@@ -38,6 +38,15 @@ class PanelController extends Controller
         return $this->render('@App/panel/show.html.twig', ['brands' => $brands]);
     }
 
+    public function tempAction(Request $request)
+    {
+
+
+        $sql = 'SELECT';
+
+        return $this->render('@App/panel/temp.html.twig', ['sql' => $sql]);
+    }
+
     public function activitiesAction(Request $request)
     {
         $activities = [];
@@ -191,20 +200,35 @@ class PanelController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            echo $form->get('copyIps')->getData();
-            /** @var Applications $data */
-            $data = $form->getData();
-
-            $company = $data->getCompany();
-//            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->getLastOfAgency($company);
-            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->findOneBy(['company' => $company], ['id' => 'DESC']);
-            $lastApplication = $this->getDoctrine()->getRepository('AppBundle:ApplicationIps')->findBy(['application' => $lastApplication]);
-
-            dump($lastApplication);
-            die();
-
+            /** @var Applications $application */
+            $application = $form->getData();
             $em = $this->getDoctrine()->getManager();
-//            $em->persist($data);
+//            dump($application);
+
+            if ($form->get('copyIps')->getData()) {
+                $company = $application->getCompany();
+                $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->findOneBy(['company' => $company], ['id' => 'DESC']);
+                $lastApplicationIps = $this->getDoctrine()->getRepository('AppBundle:ApplicationIps')->findBy(['application' => $lastApplication]);
+//                dump($company);
+//                dump($lastApplication);
+//                dump($lastApplicationIps);
+//                die();
+
+                $em->persist($application);
+                $em->flush();
+                foreach ($lastApplicationIps as $LastAplicationIp) {
+                    $ApplicationIp = new ApplicationIps();
+                    $ApplicationIp->setApplication($application);
+                    $ApplicationIp->setIp($LastAplicationIp->getIp());
+                    $em->persist($ApplicationIp);
+                }
+                $em->flush();
+            }
+            else{
+                $em->persist($application);
+                $em->flush();
+            }
+//            die('false');
 //            $em->flush();
 
             $this->addFlash('success', 'Aplikacja została dodana.');
@@ -224,6 +248,7 @@ class PanelController extends Controller
         $activities = $repository->findAll();
 
         if ($request->isMethod('post')) {
+            $content = '';
             $paramId = $request->get('activity_id');
             /** @var Activities $activity */
             $activity = $repository->find($paramId);
@@ -233,8 +258,13 @@ class PanelController extends Controller
 
             $fileName = sprintf('%s.csv', $application->getAppId());
 
-            $content = (new CsvExport($application, $activity))
-                ->getFileContent();
+            if (!is_null($request->get('download_csv'))) {
+                $content = (new CsvExport($application, $activity))
+                    ->getActivityFormContent();
+            } elseif (!is_null($request->get('download_log_requests'))) {
+                $content = (new CsvExport($application, $activity))
+                    ->getRequestsActivityFormContent();
+            }
 
             return new Response($content, 200, [
                 'Content-Encoding' => 'UTF-8 BOM',

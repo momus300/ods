@@ -17,7 +17,7 @@ class ApplicationIps
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
      * @var string
@@ -45,13 +45,13 @@ class ApplicationIps
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @ORM\PrePersist()
      *
      * @return ApplicationIps
      */
-    public function setCreated($created)
+    public function setCreated()
     {
-        $this->created = $created;
+        $this->created = new \DateTime();
 
         return $this;
     }

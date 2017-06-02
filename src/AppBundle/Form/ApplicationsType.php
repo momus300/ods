@@ -3,9 +3,11 @@
 namespace AppBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Config\Definition\IntegerNode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,6 +27,10 @@ class ApplicationsType extends AbstractType
                 'required' => false,
                 'choice_label' => 'code',
                 'class' => 'AppBundle:Campaigns'
+            ])
+            ->add('brandSet', EntityType::class, [
+                'choice_label' => 'id',
+                'class' => 'AppBundle:BrandSets'
             ])
             ->add('name', TextType::class, ['attr' => ['placeholder' => 'Akcja - Moto Mama']])
             ->add('description', TextType::class, ['attr' => ['placeholder' => 'Oferta lojlanościowa 2017 dla duchownych z możliwością wypełlnienia formularza ofertowego lub jazdy próbnej. ']])
