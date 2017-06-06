@@ -8,7 +8,9 @@
             <div class="col-md-10">
                 <select name="app_id" class="form-control selectpicker" data-live-search="true">
                     {% for application in applications %}
-                        <option value="{{ application.appId }}">{{ application.name }}</option>
+                        <option value="{{ application.appId }}">
+                            [{{ application.appId }}] {{ application.name }}
+                        </option>
                     {% endfor %}
                 </select>
             </div>
@@ -42,7 +44,7 @@
             </tbody>
         </table>
         <form class="form-inline" action="" method="post">
-            <input type="text" name="address_ip" />
+            <input type="text" name="address_ip"/>
 
             <a href="{{ path('ip_address_add', {'id': 3}) }}" class="btn btn-success">Dodaj</a>
         </form>

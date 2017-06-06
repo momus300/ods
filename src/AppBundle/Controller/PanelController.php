@@ -126,9 +126,6 @@ class PanelController extends Controller
                 ->setParameter('param', $param)
                 ->getQuery()
                 ->getResult();
-
-//            dump($applicationsIps);
-//            die();
         }
         return $this->render('@App/panel/ip-addresses.html.twig', ['applications' => $applications, 'applicationsIps' => $applicationsIps]);
     }
@@ -248,7 +245,6 @@ class PanelController extends Controller
         $activities = $repository->findAll();
 
         if ($request->isMethod('post')) {
-            $content = '';
             $paramId = $request->get('activity_id');
             /** @var Activities $activity */
             $activity = $repository->find($paramId);
@@ -256,19 +252,22 @@ class PanelController extends Controller
             $application = $activity->getApplication()->get(0);
             /** @var ActivityDataDefs $data */
 
-            $fileName = sprintf('%s.csv', $application->getAppId());
 
+//            $content = "\xEF\xBB\xBF";
+            $content = "";
             if (!is_null($request->get('download_csv'))) {
-                $content = (new CsvExport($application, $activity))
+                $content .= (new CsvExport($application, $activity))
                     ->getActivityFormContent();
+                $fileName = sprintf('%s.csv', $application->getAppId());
             } elseif (!is_null($request->get('download_log_requests'))) {
-                $content = (new CsvExport($application, $activity))
+                $content .= (new CsvExport($application, $activity))
                     ->getRequestsActivityFormContent();
+                $fileName = sprintf('%s_REQLOG.csv', $application->getAppId());
             }
 
             return new Response($content, 200, [
-                'Content-Encoding' => 'UTF-8 BOM',
-                'charset' => 'UTF-8 BOM',
+                'Content-Encoding' => 'UTF-8',
+                'charset' => 'UTF-8',
                 'X-Sendfile' => $fileName,
                 'Content-type' => 'text/csv',
                 'Content-Disposition' => sprintf('attachment; filename="%s"', $fileName)

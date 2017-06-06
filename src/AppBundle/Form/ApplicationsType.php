@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Companies;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Config\Definition\IntegerNode;
 use Symfony\Component\Form\AbstractType;
@@ -20,8 +21,12 @@ class ApplicationsType extends AbstractType
     {
         $builder
             ->add('company', EntityType::class, [
-                'choice_label' => 'name',
-                'class' => 'AppBundle:Companies'
+                'choice_label' => function($company){
+                    /** @var Companies $company */
+                    return '[id: ' . $company->getId() . ']' . $company->getName();
+                },
+                'class' => 'AppBundle:Companies',
+                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
             ])
             ->add('campaign', EntityType::class, [
                 'required' => false,

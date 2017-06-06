@@ -9,6 +9,8 @@ use Doctrine\DBAL\Connection;
 
 class CsvExport
 {
+    const BOM = "\xEF\xBB\xBF";
+
     /** @var  Activities */
     private $activity;
     /** @var  Applications */
@@ -42,18 +44,21 @@ class CsvExport
 
     public function generateFormFile()
     {
-        $serializer = $this->getContainer()->get('serializer');
-        $content = $serializer->encode($this->getData(), 'csv');
-        $fileName = sprintf('%s.csv', $this->application->getAppId());
-        $this->saveFile($fileName, $content);
-
-        return $content;
+        $data = $this->getData();
+        return $this->getCSVContent( $data );
     }
 
     public function generateRequestedFormFile()
     {
+        $data = $this->getRequestedData();
+        return $this->getCSVContent( $data );
+    }
+
+    private function getCSVContent( array $data )
+    {
         $serializer = $this->getContainer()->get('serializer');
-        $content = $serializer->encode($this->getRequestedData(), 'csv');
+        $content = self::BOM;
+        $content .= $serializer->encode($data, 'csv');
         $fileName = sprintf('%s.csv', $this->application->getAppId());
         $this->saveFile($fileName, $content);
 
@@ -162,12 +167,20 @@ LIMIT 100";
     {
         /** @var Connection $conn */
         $conn = $this->getContainer()->get('database_connection');
-        $sql = "SELECT ca.application_id, ca.activity_id, cad.customer_activity_id, ca.ext_ip, add1.name, cad.value FROM gmind_esb.customer_activities ca
+        $sql = "SELECT ca.application_id, ca.activity_id, cad.customer_activity_id, ca.ext_ip, add1.name, cad.value, cad.created FROM gmind_esb.customer_activities ca
 JOIN gmind_esb.customer_activity_data cad ON ca.id = cad.customer_activity_id
 JOIN gmind_esb.activity_data_defs add1 ON cad.data_id = add1.id
 WHERE cad.activity_id = :activity_id
-ORDER BY cad.customer_activity_id
-LIMIT 100";
+
+UNION
+
+SELECT ca.application_id, ca.activity_id, cag.customer_activity_id, ca.ext_ip, concat('[', gd.code, '] ', gd.description), cag.accepted, cag.created FROM gmind_esb.customer_activities ca
+JOIN gmind_esb.customer_activity_giodo cag ON ca.id = cag.customer_activity_id
+JOIN gmind_esb.giodo_definition gd ON cag.giodo_definition_id = gd.id
+WHERE ca.activity_id = :activity_id
+
+ORDER BY customer_activity_id DESC
+LIMIT 1000";
         $stmt = $conn->prepare($sql);
         $stmt->bindValue("activity_id", $this->activity->getId());
         $stmt->execute();
