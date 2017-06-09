@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Leads" table="leads">
+    <indexes>
+      <index name="fk_leads_brand_sets1_idx" columns="brand_set_id"/>
+      <index name="fk_leads_customers1_idx" columns="customer_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="email" columns="email,brand_set_id"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="email" type="string" column="email" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="optOut" type="boolean" column="opt_out" nullable="true"/>
+    <field name="optOutDate" type="datetime" column="opt_out_date" nullable="true"/>
+    <field name="lastFmSent" type="datetime" column="last_fm_sent" nullable="true"/>
+    <field name="name" type="string" column="name" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="surname" type="string" column="surname" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="city" type="string" column="city" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="phoneNo" type="string" column="phone_no" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="gender" type="string" column="gender" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="ownedCarModel" type="string" column="owned_car_model" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="ownedCarYear" type="string" column="owned_car_year" length="5" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="carModel" type="string" column="car_model" length="10" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="estimatedBuy" type="string" column="estimated_buy" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelExpert" type="string" column="model_expert" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="newsletterGroup" type="string" column="newsletter_group" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="bounceHardDate" type="datetime" column="bounce_hard_date" nullable="true"/>
+    <field name="bounceSoftDate" type="datetime" column="bounce_soft_date" nullable="true"/>
+    <field name="source" type="string" column="source" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="actionName" type="string" column="action_name" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="activityCode" type="string" column="activity_code" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="actionType" type="string" column="action_type" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="leadType" type="boolean" column="lead_type" nullable="true"/>
+    <field name="loginCode" type="string" column="login_code" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="customerCkId" type="string" column="customer_ck_id" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="customerActivityId" type="integer" column="customer_activity_id" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="giodo" type="boolean" column="giodo" nullable="true">
+      <options>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="testDriveStatus" type="string" column="test_drive_status" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="testDriveModel" type="string" column="test_drive_model" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="testDriveDate" type="datetime" column="test_drive_date" nullable="true"/>
+    <field name="checkOfferDate" type="datetime" column="check_offer_date" nullable="true"/>
+    <field name="checkOfferModel" type="string" column="check_offer_model" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="configurationDate" type="datetime" column="configuration_date" nullable="true"/>
+    <field name="actionNameNewsletter" type="string" column="action_name_newsletter" length="100" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="testDriveDateNewsletter" type="datetime" column="test_drive_date_newsletter" nullable="true"/>
+    <field name="checkOfferDateNewsletter" type="datetime" column="check_offer_date_newsletter" nullable="true"/>
+    <field name="configurationDateNewsletter" type="datetime" column="configuration_date_newsletter" nullable="true"/>
+    <field name="configurationModel" type="string" column="configuration_model" length="30" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-one field="brandSet" target-entity="BrandSets" fetch="LAZY">
+      <join-columns>
+        <join-column name="brand_set_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customer" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customer_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="giodoDefinition" target-entity="GiodoDefinition" inversed-by="lead" fetch="LAZY">
+      <join-table name="leads_giodo_definitions">
+        <join-columns>
+          <join-column name="lead_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="giodo_definition_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="customerActivity" target-entity="CustomerActivities" inversed-by="lead" fetch="LAZY">
+      <join-table name="leads_customer_activities">
+        <join-columns>
+          <join-column name="lead_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="customer_activity_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="activityDataDef" target-entity="ActivityDataDefs" inversed-by="lead" fetch="LAZY">
+      <join-table name="leads_activity_data_defs">
+        <join-columns>
+          <join-column name="lead_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="activity_data_def_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="ccConfiguration" target-entity="CcConfigurations" inversed-by="lead" fetch="LAZY">
+      <join-table name="leads_cc_configurations">
+        <join-columns>
+          <join-column name="lead_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="cc_configuration_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

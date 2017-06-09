@@ -179,6 +179,7 @@ class Applications
         $this->authType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activityExportDef = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->method = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -676,5 +677,55 @@ class Applications
     public function getActivity()
     {
         return $this->activity;
+    }
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Methods", inversedBy="application")
+     * @ORM\JoinTable(name="methods_application",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="method_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $method;
+
+
+    /**
+     * Add method
+     *
+     * @param \AppBundle\Entity\Methods $method
+     *
+     * @return Applications
+     */
+    public function addMethod(\AppBundle\Entity\Methods $method)
+    {
+        $this->method[] = $method;
+
+        return $this;
+    }
+
+    /**
+     * Remove method
+     *
+     * @param \AppBundle\Entity\Methods $method
+     */
+    public function removeMethod(\AppBundle\Entity\Methods $method)
+    {
+        $this->method->removeElement($method);
+    }
+
+    /**
+     * Get method
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 }

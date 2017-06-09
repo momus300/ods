@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\StaticComponents" table="static_components">
+    <indexes>
+      <index name="ind_model_key" columns="model_key"/>
+      <index name="ind_model_id" columns="model_id"/>
+      <index name="ind_code" columns="code"/>
+      <index name="ind_active_start_end" columns="active,active_start,active_end"/>
+      <index name="fk_static_components_applications1_idx" columns="application_id"/>
+      <index name="fk_static_components_activity1_idx" columns="activity_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="code" type="string" column="code" length="5" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelKey" type="string" column="model_key" length="6" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="modelId" type="string" column="model_id" length="45" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="default">%</option>
+      </options>
+    </field>
+    <field name="data" type="text" column="data" length="65535" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="type" type="string" column="type" length="20" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">link
+image</option>
+        <option name="default">link</option>
+      </options>
+    </field>
+    <field name="active" type="integer" column="active" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-one field="activity" target-entity="Activities" fetch="LAZY">
+      <join-columns>
+        <join-column name="activity_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="application" target-entity="Applications" fetch="LAZY">
+      <join-columns>
+        <join-column name="application_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\PasDatas" table="pas_datas">
+    <indexes>
+      <index name="fk_pas_data_pas_category_idx" columns="pas_category_id"/>
+      <index name="fk_pas_data_pas_icon_idx" columns="pas_icon_id"/>
+      <index name="ind_status" columns="status"/>
+      <index name="ind_priority_cios" columns="priority_cios"/>
+      <index name="code" columns="code"/>
+      <index name="name" columns="name"/>
+      <index name="price_base" columns="price_base"/>
+      <index name="version" columns="version"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="code" type="string" column="code" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="name" type="string" column="name" length="250" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="text" column="description" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="priceBase" type="float" column="price_base" precision="15" scale="2" nullable="false"/>
+    <field name="pricePromo" type="float" column="price_promo" precision="15" scale="2" nullable="true"/>
+    <field name="priority" type="integer" column="priority" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="priorityCios" type="integer" column="priority_cios" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <field name="status" type="integer" column="status" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="version" type="float" column="version" precision="10" scale="0" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="param1" type="text" column="param_1" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param2" type="text" column="param_2" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param3" type="text" column="param_3" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param4" type="text" column="param_4" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param5" type="text" column="param_5" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param6" type="text" column="param_6" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param7" type="text" column="param_7" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param8" type="text" column="param_8" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param9" type="text" column="param_9" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param10" type="text" column="param_10" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param11" type="text" column="param_11" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param12" type="text" column="param_12" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param13" type="text" column="param_13" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param14" type="text" column="param_14" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="param15" type="text" column="param_15" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="clientType" type="integer" column="client_type" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <many-to-one field="pasCategory" target-entity="PasCategories" fetch="LAZY">
+      <join-columns>
+        <join-column name="pas_category_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="pasIcon" target-entity="PasIcons" fetch="LAZY">
+      <join-columns>
+        <join-column name="pas_icon_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="brand" target-entity="Brands" inversed-by="pasData" fetch="LAZY">
+      <join-table name="pas_data_brands">
+        <join-columns>
+          <join-column name="pas_data_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="brand_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

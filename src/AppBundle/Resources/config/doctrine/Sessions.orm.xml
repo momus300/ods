@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\Sessions" table="sessions">
+    <indexes>
+      <index name="fk_sessions_customers1_idx" columns="customers_id"/>
+      <index name="fk_sessions_applications1_idx" columns="applications_id"/>
+      <index name="fk_sessions_cc_configurations1_idx" columns="cc_configurations_id"/>
+      <index name="last_modified_idx" columns="last_modified"/>
+      <index name="user_id" columns="user_id"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="session_UNIQUE" columns="session"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="session" type="string" column="session" length="64" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="data" type="text" column="data" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="extIp" type="string" column="ext_ip" length="15" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <field name="userAgent" type="string" column="user_agent" length="140" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="user" target-entity="Users" fetch="LAZY">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customers" target-entity="Customers" fetch="LAZY">
+      <join-columns>
+        <join-column name="customers_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="ccConfigurations" target-entity="CcConfigurations" fetch="LAZY">
+      <join-columns>
+        <join-column name="cc_configurations_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="applications" target-entity="Applications" fetch="LAZY">
+      <join-columns>
+        <join-column name="applications_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

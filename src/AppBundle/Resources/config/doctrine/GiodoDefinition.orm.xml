@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\GiodoDefinition" table="giodo_definition">
+    <indexes>
+      <index name="code" columns="code"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="description" type="text" column="description" length="65535" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="code" type="string" column="code" length="45" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="crmCode" type="string" column="crm_code" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="active" type="boolean" column="active" nullable="false">
+      <options>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeFrom" type="datetime" column="active_from" nullable="true"/>
+    <field name="activeTo" type="datetime" column="active_to" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="modified" type="datetime" column="modified" nullable="true"/>
+    <many-to-many field="lead" target-entity="Leads" mapped-by="giodoDefinition" fetch="LAZY"/>
+    <many-to-many field="customerActivity" target-entity="CustomerActivities" inversed-by="giodoDefinition" fetch="LAZY">
+      <join-table name="customer_activity_giodo">
+        <join-columns>
+          <join-column name="giodo_definition_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="customer_activity_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="activity" target-entity="Activities" inversed-by="giodoDefinition" fetch="LAZY">
+      <join-table name="activity_giodo">
+        <join-columns>
+          <join-column name="giodo_definition_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="activity_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

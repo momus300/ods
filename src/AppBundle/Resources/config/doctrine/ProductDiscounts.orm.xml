@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="AppBundle\Entity\ProductDiscounts" table="product_discounts">
+    <indexes>
+      <index name="code_idx" columns="code"/>
+      <index name="model_key_idx" columns="model_key"/>
+      <index name="product_code_idx" columns="product_code"/>
+      <index name="fk_product_discounts_discount_history1_idx" columns="discount_history_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="50" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Custom name of the entry</option>
+      </options>
+    </field>
+    <field name="code" type="string" column="code" length="20" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Code for an entry. It's an ID of the entry for a business logic.</option>
+      </options>
+    </field>
+    <field name="type" type="integer" column="type" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="comment">Discount type:
+0 - information only
+1 - car discount (use model key)
+2 - car package discount (use product_code)
+3 - accessory discount (use product_code)
+4 - service discount (use product_code)
+</option>
+        <option name="default">0</option>
+      </options>
+    </field>
+    <field name="modelKey" type="string" column="model_key" length="6" nullable="false">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">6-char model key of the car. Can use wild-card (*) instead of unknown or any value, eg. 543*84</option>
+      </options>
+    </field>
+    <field name="productCode" type="string" column="product_code" length="150" nullable="true">
+      <options>
+        <option name="fixed"/>
+        <option name="comment">Package or product or service code</option>
+      </options>
+    </field>
+    <field name="value" type="decimal" column="value" precision="15" scale="2" nullable="false">
+      <options>
+        <option name="comment">Discount value</option>
+        <option name="default">0.00</option>
+      </options>
+    </field>
+    <field name="valueRate" type="decimal" column="value_rate" precision="15" scale="2" nullable="true">
+      <options>
+        <option name="comment">Discount value rate (%) alternatively to value</option>
+      </options>
+    </field>
+    <field name="active" type="integer" column="active" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">1</option>
+      </options>
+    </field>
+    <field name="activeStart" type="datetime" column="active_start" nullable="true"/>
+    <field name="activeEnd" type="datetime" column="active_end" nullable="true"/>
+    <field name="created" type="datetime" column="created" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-one field="discountHistory" target-entity="DiscountHistory" fetch="LAZY">
+      <join-columns>
+        <join-column name="discount_history_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

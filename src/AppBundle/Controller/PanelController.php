@@ -7,6 +7,7 @@ use AppBundle\Entity\ActivityDataDefs;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
 use AppBundle\Entity\BrandSets;
+use AppBundle\Entity\Methods;
 use AppBundle\Form\ActivityApplicationType;
 use AppBundle\Form\ApplicationsType;
 use AppBundle\Utils\CsvExport;
@@ -32,6 +33,8 @@ use Symfony\Component\Serializer\Serializer;
 
 class PanelController extends Controller
 {
+    const SET_ACTIVITY_METHOD = 23;
+
     public function showAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
@@ -197,6 +200,11 @@ class PanelController extends Controller
             /** @var Applications $application */
             $application = $form->getData();
             $em = $this->getDoctrine()->getManager();
+            $method =  $em->getRepository(Methods::class)->find(self::SET_ACTIVITY_METHOD);
+//            dump($method);
+//            die();
+            $application->addMethod($method);
+            $em->persist($method);
             $em->persist($application);
 
             if ($form->get('copyIps')->getData()) {
