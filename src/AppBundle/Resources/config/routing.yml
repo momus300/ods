@@ -25,7 +25,7 @@ ip_address_add:
 #Aktywnosc
 
 activity_data:
-  path:     /aktywnosc-dane
+  path:     /aktywnosc/dane
   defaults: { _controller: AppBundle:Panel:activityData }
 
 #activity_data_id:
@@ -50,6 +50,10 @@ application_add:
   path:     /aplikacja/dodaj
   defaults: { _controller: AppBundle:Panel:applicationAdd }
 
+application_join_activity:
+  path:     /aplikacja/dolacz-formularz
+  defaults: { _controller: AppBundle:Panel:applicationJoinActivity }
+
 #Dokumenty
 
 documents_for_agency:
@@ -59,6 +63,8 @@ documents_for_agency:
 
 
 
-temporary:
-  path:   /chwilowe
-  defaults: { _controller: AppBundle:Panel:temp }
+
+
+react:
+  path:   /react
+  defaults: { _controller: AppBundle:Panel:react }

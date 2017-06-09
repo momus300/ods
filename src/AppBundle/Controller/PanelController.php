@@ -7,6 +7,7 @@ use AppBundle\Entity\ActivityDataDefs;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
 use AppBundle\Entity\BrandSets;
+use AppBundle\Form\ActivityApplicationType;
 use AppBundle\Form\ApplicationsType;
 use AppBundle\Utils\CsvExport;
 use AppBundle\Utils\PasswordGenerator;
@@ -38,15 +39,6 @@ class PanelController extends Controller
         return $this->render('@App/panel/show.html.twig', ['brands' => $brands]);
     }
 
-    public function tempAction(Request $request)
-    {
-
-
-        $sql = 'SELECT';
-
-        return $this->render('@App/panel/temp.html.twig', ['sql' => $sql]);
-    }
-
     public function activitiesAction(Request $request)
     {
         $activities = [];
@@ -64,37 +56,17 @@ class PanelController extends Controller
     public function activityAddAction(Request $request)
     {
         $activity = new Activities();
-
-        /** @var Form $form */
-        $form = $this->createFormBuilder($activity)
-            ->add('code', TextType::class, ['attr' => ['placeholder' => 'Przykład: SKMOMA2017-submit']])
-            ->add('name', TextType::class, ['attr' => ['placeholder' => 'Przykład: Formularz zgłoszeniowy do konkursu']])
-            ->add('description', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Przykład: Oferta lojlanościowa 2017 dla duchownych z możliwością wypełlnienia formularza ofertowego lub jazdy próbnej']])
-            ->add('actionName', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Przykład: 201704_w_dobra_strone_ze_skoda']])
-            ->add('actionType', TextType::class, ['attr' => ['placeholder' => 'Przykład: zapis_konkurs/OF/JP']])
-            ->add('channel', ChoiceType::class, ['choices' => array_flip([
-                'Internet',
-                'Event',
-                'Emailing',
-                'Ipad',
-                'Callcenter',
-                'Mobile',
-                'SMS',
-                'TV'
-            ])])
-            ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
-            ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']])
-            ->getForm();
-
+        $form = $this->createForm(ActivityApplicationType::class, $activity);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Activities $data */
             $data = $form->getData();
-
-//            dump($data);
-//            die();
-
+            /** @var Applications $application */
+            $application = $data->getApplication()[0];
+            $application->addActivity($data);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($application);
             $em->persist($data);
             $em->flush();
 
@@ -128,6 +100,32 @@ class PanelController extends Controller
                 ->getResult();
         }
         return $this->render('@App/panel/ip-addresses.html.twig', ['applications' => $applications, 'applicationsIps' => $applicationsIps]);
+    }
+
+    public function reactAction(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Applications');
+        $applications = $repository->findAll();
+
+        $applicationsIps = [];
+        if ($request->isMethod('post')) {
+            if( $ips = $request->get('ip_address') ){
+                dump($ips);
+                die();
+            }
+            $param = $request->get('app_id');
+
+            /** @var \Doctrine\DBAL\Query\QueryBuilder $qb */
+            $qb = $repository->createQueryBuilder('a');
+            $applicationsIps = $qb
+                ->select('ai')
+                ->join('AppBundle:ApplicationIps', 'ai', 'WITH', 'a.id = ai.application')
+                ->where('a.appId = :param')
+                ->setParameter('param', $param)
+                ->getQuery()
+                ->getResult();
+        }
+        return $this->render('@App/panel/react.html.twig', ['applications' => $applications, 'applicationsIps' => $applicationsIps]);
     }
 
     public function activityDataAction(Request $request)
@@ -185,7 +183,6 @@ class PanelController extends Controller
 
     public function applicationAddAction(Request $request)
     {
-
         $generator = $this->get('app.password_generator');
 
         $application = new Applications();
@@ -200,33 +197,22 @@ class PanelController extends Controller
             /** @var Applications $application */
             $application = $form->getData();
             $em = $this->getDoctrine()->getManager();
-//            dump($application);
+            $em->persist($application);
 
             if ($form->get('copyIps')->getData()) {
                 $company = $application->getCompany();
                 $lastApplication = $this->getDoctrine()->getRepository('AppBundle:Applications')->findOneBy(['company' => $company], ['id' => 'DESC']);
                 $lastApplicationIps = $this->getDoctrine()->getRepository('AppBundle:ApplicationIps')->findBy(['application' => $lastApplication]);
-//                dump($company);
-//                dump($lastApplication);
-//                dump($lastApplicationIps);
-//                die();
 
-                $em->persist($application);
-                $em->flush();
                 foreach ($lastApplicationIps as $LastAplicationIp) {
                     $ApplicationIp = new ApplicationIps();
                     $ApplicationIp->setApplication($application);
                     $ApplicationIp->setIp($LastAplicationIp->getIp());
                     $em->persist($ApplicationIp);
                 }
-                $em->flush();
             }
-            else{
-                $em->persist($application);
-                $em->flush();
-            }
-//            die('false');
-//            $em->flush();
+
+            $em->flush();
 
             $this->addFlash('success', 'Aplikacja została dodana.');
 
@@ -237,6 +223,19 @@ class PanelController extends Controller
             'form' => $form->createView()
         ]);
     }
+
+//    public function applicationJoinActivityAction()
+//    {
+//        $em = $this->getDoctrine()->getManager();
+//        $appRepo = $em->getRepository('AppBundle:Applications');
+//        $applications = $appRepo->findAll();
+//
+//        $em = $this->getDoctrine()->getManager();
+//        $appRepo = $em->getRepository('AppBundle:Activities');
+//        $activities = $appRepo->findAll();
+//
+//        return $this->render('@App/panel/application-join-activity.html.twig', ['applications' => $applications, 'activities' => $activities]);
+//    }
 
     public function documentsAction(Request $request)
     {

@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+
+        <form class="form-inline" action="" method="post">
+
+            <div class="col-md-10">
+                <select name="app_id" class="form-control selectpicker" data-live-search="true">
+                    {% for application in applications %}
+                        <option value="{{ application.appId }}">
+                            [{{ application.appId }}] {{ application.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Pokaz</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <h2>Lista adresow ip dla aplikacji: {{ app.request.get('app_id') }}</h2>
+        <form action="" method="post">
+            <input type="submit" value="wyslij"/>
+            <div id="ips"/>
+        </form>
+    </div>
+
+    <script type="text/babel">
+        var Ip = React.createClass({
+            remove: function () {
+                this.props.deleteFromIps(this.props.index);
+            },
+            render: function () {
+                return (
+                        <tr>
+                            <td><strong>{this.props.index}</strong></td>
+                            <td><input type="text" name="ip_address[]" value={this.props.children}/></td>
+                            <td>
+                                <a onClick={this.remove} href="#" className="btn-sm btn-danger">
+                                    <span className="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </a>
+                            </td>
+                        </tr>
+                );
+            }
+
+        });
+
+        var Board = React.createClass({
+            getInitialState: function () {
+                return {
+                    ips: [
+                        {% for appIp in applicationsIps %}
+                        '{{ appIp.ip }}',
+                        {% endfor %}
+                    ]
+                }
+            },
+
+            add: function () {
+                var arr = this.state.ips;
+                arr.push('');
+                this.setState({ips: arr});
+            },
+
+            eachIps: function (text, i) {
+                return (
+                        <Ip key={ i } index={ i } deleteFromIps={this.removeIp}>
+                            { text }
+                        </Ip>
+                );
+            },
+
+            removeIp: function (i) {
+                var arr = this.state.ips;
+                arr.splice(i, 1);
+                this.setState({ips: arr})
+            },
+
+            render: function () {
+                return (
+                        <div>
+                            <div className="col-md-4">
+                                <table className="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Adres IP</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {this.state.ips.map(this.eachIps)}
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div className="col-md-2">
+                                <a onClick={this.add} href="#" className="btn btn-success">
+                                    <span className="glyphicon glyphicon-plus" aria-hidden="true">IP</span>
+                                </a>
+                            </div>
+                        </div>
+                );
+            }
+        });
+
+        ReactDOM.render(<Board/>, document.getElementById('ips'));
+
+    </script>
+{% endblock %}
+

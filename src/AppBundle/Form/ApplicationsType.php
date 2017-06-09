@@ -15,15 +15,13 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ApplicationsType extends AbstractType
 {
-
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('company', EntityType::class, [
                 'choice_label' => function($company){
                     /** @var Companies $company */
-                    return '[id: ' . $company->getId() . ']' . $company->getName();
+                    return '[id:' . $company->getId() . '] ' . $company->getName();
                 },
                 'class' => 'AppBundle:Companies',
                 'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
@@ -42,7 +40,7 @@ class ApplicationsType extends AbstractType
             ->add('appId', TextType::class, ['attr' => ['placeholder' => 'SKMOMA2017']])
             ->add('order', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
             ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
-            ->add('copyIps', CheckboxType::class, ['mapped' => false, 'required' => false])
+            ->add('copyIps', CheckboxType::class, ['label' => 'Skopiuj adresy IP z poprzedniej aplikacji agencji', 'mapped' => false, 'required' => false])
             ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']]);
     }
 }

@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <form class="form-inline" action="" method="post">
+            <div class="col-md-8">
+                <select name="application_id" class="form-control selectpicker" data-live-search="true">
+                    {% for application in applications %}
+                        <option value="{{ application.id }}">{{ application.appId }} - {{ application.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="lin"
+            <div class="col-md-8">
+                <select name="activity_id" class="form-control selectpicker" data-live-search="true">
+                    {% for activity in activities %}
+                        <option value="{{ activity.id }}">{{ activity.code }} - {{ activity.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" name="download_log_requests" class="btn btn-info">Połącz</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+
