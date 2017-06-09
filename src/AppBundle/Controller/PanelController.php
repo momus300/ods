@@ -186,14 +186,8 @@ class PanelController extends Controller
 
     public function applicationAddAction(Request $request)
     {
-        $generator = $this->get('app.password_generator');
-
         $application = new Applications();
-        $application->setPublicKey($generator->generate()->getPassword());
-        $application->setAdminKey($generator->generate()->getPassword());
-
         $form = $this->createForm(ApplicationsType::class, $application);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

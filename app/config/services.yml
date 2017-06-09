@@ -4,11 +4,15 @@ parameters:
     #parameter_name: value
 
 services:
+    app.password_generator:
+          class: AppBundle\Services\PasswordGenerator
     #service_name:
     #    class: AppBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
-    app.password_generator:
-        class: AppBundle\Services\PasswordGenerator
+    app.password_generator_listiner:
+        class: AppBundle\EventListener\PasswordGenerator
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
 
     get_set_method_encoder:
         class: Symfony\Component\Serializer\Encoder\CsvEncoder
