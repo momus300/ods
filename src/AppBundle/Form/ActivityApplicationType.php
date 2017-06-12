@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Applications;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -16,11 +17,15 @@ class ActivityApplicationType extends AbstractType
     {
         $builder
             ->add('application', EntityType::class, [
+                'class' => Applications::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('a')
+                        ->orderBy('a.id', 'DESC');
+                },
                 'choice_label' => function ($application) {
                     /** @var Applications $application */
                     return '[app_id:' . $application->getAppId() . '] ' . $application->getName();
                 },
-                'class' => Applications::class,
                 'multiple' => true,
                 'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
             ])
@@ -29,6 +34,7 @@ class ActivityApplicationType extends AbstractType
             ->add('description', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Przykład: Oferta lojlanościowa 2017 dla duchownych z możliwością wypełlnienia formularza ofertowego lub jazdy próbnej']])
             ->add('actionName', TextType::class, ['required' => false, 'attr' => ['placeholder' => 'Przykład: 201704_w_dobra_strone_ze_skoda']])
             ->add('actionType', TextType::class, ['attr' => ['placeholder' => 'Przykład: zapis_konkurs/OF/JP']])
+            ->add('url', TextType::class, ['required' => false])
             ->add('channel', ChoiceType::class, ['choices' => array_flip([
                 'Internet',
                 'Event',

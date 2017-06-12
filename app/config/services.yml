@@ -6,11 +6,10 @@ parameters:
 services:
     app.password_generator:
           class: AppBundle\Services\PasswordGenerator
-    #service_name:
-    #    class: AppBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+
     app.password_generator_listiner:
         class: AppBundle\EventListener\PasswordGenerator
+        arguments: ['@app.password_generator']
         tags:
             - { name: doctrine.event_listener, event: prePersist }
 
@@ -19,7 +18,3 @@ services:
         arguments: [';']
         tags:
             - { name: serializer.encoder }
-
-#    app.utils.csv_exporter:
-#        class: AppBundle\Utils\CsvExport
-#        arguments: ['@service_container']

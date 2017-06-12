@@ -226,24 +226,11 @@ class PanelController extends Controller
         ]);
     }
 
-//    public function applicationJoinActivityAction()
-//    {
-//        $em = $this->getDoctrine()->getManager();
-//        $appRepo = $em->getRepository('AppBundle:Applications');
-//        $applications = $appRepo->findAll();
-//
-//        $em = $this->getDoctrine()->getManager();
-//        $appRepo = $em->getRepository('AppBundle:Activities');
-//        $activities = $appRepo->findAll();
-//
-//        return $this->render('@App/panel/application-join-activity.html.twig', ['applications' => $applications, 'activities' => $activities]);
-//    }
-
     public function documentsAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $repository = $em->getRepository('AppBundle:Activities');
-        $activities = $repository->findAll();
+        $activities = $repository->findBy([], ['id' => 'DESC']);
 
         if ($request->isMethod('post')) {
             $paramId = $request->get('activity_id');
@@ -253,8 +240,6 @@ class PanelController extends Controller
             $application = $activity->getApplication()->get(0);
             /** @var ActivityDataDefs $data */
 
-
-//            $content = "\xEF\xBB\xBF";
             $content = "";
             if (!is_null($request->get('download_csv'))) {
                 $content .= (new CsvExport($application, $activity))
