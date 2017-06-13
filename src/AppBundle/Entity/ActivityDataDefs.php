@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ActivityDataDefs
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
@@ -55,20 +64,18 @@ class ActivityDataDefs
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToMany(targetEntity="Activities", mappedBy="data")
      */
-    private $id;
+    private $activity;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", mappedBy="data")
+     * @ORM\ManyToMany(targetEntity="Leads", mappedBy="activityDataDef")
      */
-    private $activity;
+    private $lead;
 
     /**
      * Constructor
@@ -76,8 +83,19 @@ class ActivityDataDefs
     public function __construct()
     {
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -224,16 +242,6 @@ class ActivityDataDefs
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Add activity
      *
      * @param \AppBundle\Entity\Activities $activity
@@ -265,5 +273,39 @@ class ActivityDataDefs
     public function getActivity()
     {
         return $this->activity;
+    }
+
+    /**
+     * Add lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     *
+     * @return ActivityDataDefs
+     */
+    public function addLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead[] = $lead;
+
+        return $this;
+    }
+
+    /**
+     * Remove lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     */
+    public function removeLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead->removeElement($lead);
+    }
+
+    /**
+     * Get lead
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLead()
+    {
+        return $this->lead;
     }
 }

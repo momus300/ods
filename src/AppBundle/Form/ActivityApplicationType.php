@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\ActivityExportDefs;
 use AppBundle\Entity\Applications;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -45,7 +46,14 @@ class ActivityApplicationType extends AbstractType
                 'SMS',
                 'TV'
             ])])
-            ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
+//            ->add('active', ChoiceType::class, ['choices' => array_combine(range(0, 1), range(0, 1))])
+            ->add('activityExportDef', EntityType::class, [
+                'class' => ActivityExportDefs::class,
+                'choice_label' => 'name',
+                'label' => 'Eksport do CRM',
+                'required' => false,
+                'multiple' => true,
+            ])
             ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']]);
     }
 

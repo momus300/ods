@@ -8,15 +8,14 @@
     <id name="id" type="integer" column="id">
       <generator strategy="IDENTITY"/>
     </id>
+    <field name="applicationsId" type="integer" column="applications_id" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
     <many-to-one field="customers" target-entity="Customers" fetch="LAZY">
       <join-columns>
         <join-column name="customers_id" referenced-column-name="id"/>
-        <join-column name="brand_set_id" referenced-column-name="brand_set_id"/>
-      </join-columns>
-    </many-to-one>
-    <many-to-one field="applications" target-entity="Applications" fetch="LAZY">
-      <join-columns>
-        <join-column name="applications_id" referenced-column-name="id"/>
         <join-column name="brand_set_id" referenced-column-name="brand_set_id"/>
       </join-columns>
     </many-to-one>

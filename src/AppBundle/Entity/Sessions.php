@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Sessions
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="session", type="string", length=64, nullable=false)
@@ -55,38 +64,19 @@ class Sessions
     private $userAgent;
 
     /**
-     * @var integer
+     * @var \Applications
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Users
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Users")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="applications_id", referencedColumnName="id")
      * })
      */
-    private $user;
+    private $applications;
 
     /**
-     * @var \AppBundle\Entity\Customers
+     * @var \CcConfigurations
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customers_id", referencedColumnName="id")
-     * })
-     */
-    private $customers;
-
-    /**
-     * @var \AppBundle\Entity\CcConfigurations
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cc_configurations_id", referencedColumnName="id")
      * })
@@ -94,16 +84,36 @@ class Sessions
     private $ccConfigurations;
 
     /**
-     * @var \AppBundle\Entity\Applications
+     * @var \Customers
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="applications_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="customers_id", referencedColumnName="id")
      * })
      */
-    private $applications;
+    private $customers;
+
+    /**
+     * @var \Users
+     *
+     * @ORM\ManyToOne(targetEntity="Users")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $user;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set session
@@ -250,61 +260,27 @@ class Sessions
     }
 
     /**
-     * Get id
+     * Set applications
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \AppBundle\Entity\Users $user
+     * @param \AppBundle\Entity\Applications $applications
      *
      * @return Sessions
      */
-    public function setUser(\AppBundle\Entity\Users $user = null)
+    public function setApplications(\AppBundle\Entity\Applications $applications = null)
     {
-        $this->user = $user;
+        $this->applications = $applications;
 
         return $this;
     }
 
     /**
-     * Get user
+     * Get applications
      *
-     * @return \AppBundle\Entity\Users
+     * @return \AppBundle\Entity\Applications
      */
-    public function getUser()
+    public function getApplications()
     {
-        return $this->user;
-    }
-
-    /**
-     * Set customers
-     *
-     * @param \AppBundle\Entity\Customers $customers
-     *
-     * @return Sessions
-     */
-    public function setCustomers(\AppBundle\Entity\Customers $customers = null)
-    {
-        $this->customers = $customers;
-
-        return $this;
-    }
-
-    /**
-     * Get customers
-     *
-     * @return \AppBundle\Entity\Customers
-     */
-    public function getCustomers()
-    {
-        return $this->customers;
+        return $this->applications;
     }
 
     /**
@@ -332,26 +308,50 @@ class Sessions
     }
 
     /**
-     * Set applications
+     * Set customers
      *
-     * @param \AppBundle\Entity\Applications $applications
+     * @param \AppBundle\Entity\Customers $customers
      *
      * @return Sessions
      */
-    public function setApplications(\AppBundle\Entity\Applications $applications = null)
+    public function setCustomers(\AppBundle\Entity\Customers $customers = null)
     {
-        $this->applications = $applications;
+        $this->customers = $customers;
 
         return $this;
     }
 
     /**
-     * Get applications
+     * Get customers
      *
-     * @return \AppBundle\Entity\Applications
+     * @return \AppBundle\Entity\Customers
      */
-    public function getApplications()
+    public function getCustomers()
     {
-        return $this->applications;
+        return $this->customers;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \AppBundle\Entity\Users $user
+     *
+     * @return Sessions
+     */
+    public function setUser(\AppBundle\Entity\Users $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\Users
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 }

@@ -1,64 +1,89 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mcwiklin
- * Date: 17.05.2017
- * Time: 14:47
- */
 
 namespace AppBundle\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * SmsTemplates
+ *
+ * @ORM\Table(name="sms_templates", indexes={@ORM\Index(name="fk_sms_templates_applications1_idx", columns={"application_id"})})
+ * @ORM\Entity
+ */
 class SmsTemplates
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=50, nullable=false)
      */
     private $name;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="sender_name", type="string", length=11, nullable=true)
      */
     private $senderName;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="description", type="text", length=65535, nullable=true)
      */
     private $description;
 
     /**
      * @var string
+     *
+     * @ORM\Column(name="content", type="text", length=65535, nullable=false)
      */
     private $content;
 
     /**
      * @var boolean
+     *
+     * @ORM\Column(name="type", type="boolean", nullable=false)
      */
     private $type = '0';
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
      */
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="last_modified", type="datetime", nullable=true)
      */
     private $lastModified;
 
     /**
-     * @var integer
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Applications
+     * @var \Applications
+     *
+     * @ORM\ManyToOne(targetEntity="Applications")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     * })
      */
     private $application;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Activities", mappedBy="smsTemplate")
      */
     private $activity;
 
@@ -68,6 +93,17 @@ class SmsTemplates
     public function __construct()
     {
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
@@ -236,16 +272,6 @@ class SmsTemplates
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

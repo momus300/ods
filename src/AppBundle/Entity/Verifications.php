@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Verifications
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="request_type", type="boolean", nullable=false)
@@ -97,28 +106,9 @@ class Verifications
     private $verificationIp;
 
     /**
-     * @var integer
+     * @var \ApplicationAuthTypes
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Customers
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
-     * })
-     */
-    private $customer;
-
-    /**
-     * @var \AppBundle\Entity\ApplicationAuthTypes
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApplicationAuthTypes")
+     * @ORM\ManyToOne(targetEntity="ApplicationAuthTypes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="auth_type_id", referencedColumnName="auth_type_id"),
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="application_id")
@@ -126,7 +116,27 @@ class Verifications
      */
     private $authType;
 
+    /**
+     * @var \Customers
+     *
+     * @ORM\ManyToOne(targetEntity="Customers")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     * })
+     */
+    private $customer;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set requestType
@@ -417,13 +427,27 @@ class Verifications
     }
 
     /**
-     * Get id
+     * Set authType
      *
-     * @return integer
+     * @param \AppBundle\Entity\ApplicationAuthTypes $authType
+     *
+     * @return Verifications
      */
-    public function getId()
+    public function setAuthType(\AppBundle\Entity\ApplicationAuthTypes $authType = null)
     {
-        return $this->id;
+        $this->authType = $authType;
+
+        return $this;
+    }
+
+    /**
+     * Get authType
+     *
+     * @return \AppBundle\Entity\ApplicationAuthTypes
+     */
+    public function getAuthType()
+    {
+        return $this->authType;
     }
 
     /**
@@ -448,29 +472,5 @@ class Verifications
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * Set authType
-     *
-     * @param \AppBundle\Entity\ApplicationAuthTypes $authType
-     *
-     * @return Verifications
-     */
-    public function setAuthType(\AppBundle\Entity\ApplicationAuthTypes $authType = null)
-    {
-        $this->authType = $authType;
-
-        return $this;
-    }
-
-    /**
-     * Get authType
-     *
-     * @return \AppBundle\Entity\ApplicationAuthTypes
-     */
-    public function getAuthType()
-    {
-        return $this->authType;
     }
 }

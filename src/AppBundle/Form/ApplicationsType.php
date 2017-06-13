@@ -2,13 +2,13 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\BrandSets;
+use AppBundle\Entity\Campaigns;
 use AppBundle\Entity\Companies;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Config\Definition\IntegerNode;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,21 +19,24 @@ class ApplicationsType extends AbstractType
     {
         $builder
             ->add('company', EntityType::class, [
+                'class' => Companies::class,
                 'choice_label' => function($company){
                     /** @var Companies $company */
                     return '[id:' . $company->getId() . '] ' . $company->getName();
                 },
-                'class' => 'AppBundle:Companies',
                 'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
             ])
             ->add('campaign', EntityType::class, [
+                'class' => Campaigns::class,
                 'required' => false,
-                'choice_label' => 'code',
-                'class' => 'AppBundle:Campaigns'
+                'choice_label' => 'code'
             ])
-            ->add('brandSet', EntityType::class, [
+            ->add('brandSetId', EntityType::class, [
+                'class' => BrandSets::class,
                 'choice_label' => 'id',
-                'class' => 'AppBundle:BrandSets'
+//                'data_class' => null,
+//                'mapped' => false,
+
             ])
             ->add('name', TextType::class, ['attr' => ['placeholder' => 'Akcja - Moto Mama']])
             ->add('description', TextType::class, ['attr' => ['placeholder' => 'Oferta lojlanościowa 2017 dla duchownych z możliwością wypełlnienia formularza ofertowego lub jazdy próbnej. ']])

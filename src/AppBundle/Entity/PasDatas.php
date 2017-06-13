@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class PasDatas
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=100, nullable=false)
@@ -202,18 +211,9 @@ class PasDatas
     private $clientType;
 
     /**
-     * @var integer
+     * @var \PasCategories
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasCategories
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasCategories")
+     * @ORM\ManyToOne(targetEntity="PasCategories")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pas_category_id", referencedColumnName="id")
      * })
@@ -221,9 +221,9 @@ class PasDatas
     private $pasCategory;
 
     /**
-     * @var \AppBundle\Entity\PasIcons
+     * @var \PasIcons
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasIcons")
+     * @ORM\ManyToOne(targetEntity="PasIcons")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pas_icon_id", referencedColumnName="id")
      * })
@@ -233,7 +233,7 @@ class PasDatas
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Brands", inversedBy="pasData")
+     * @ORM\ManyToMany(targetEntity="Brands", inversedBy="pasData")
      * @ORM\JoinTable(name="pas_data_brands",
      *   joinColumns={
      *     @ORM\JoinColumn(name="pas_data_id", referencedColumnName="id")
@@ -253,6 +253,16 @@ class PasDatas
         $this->brand = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -900,16 +910,6 @@ class PasDatas
     public function getClientType()
     {
         return $this->clientType;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

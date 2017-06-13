@@ -15,6 +15,15 @@ class BrandSets
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="bin_code", type="integer", nullable=true)
      */
     private $binCode;
@@ -34,18 +43,9 @@ class BrandSets
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Brands", inversedBy="brandSet")
+     * @ORM\ManyToMany(targetEntity="Brands", inversedBy="brandSet")
      * @ORM\JoinTable(name="brand_set_brands",
      *   joinColumns={
      *     @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
@@ -65,6 +65,16 @@ class BrandSets
         $this->brand = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set binCode
@@ -136,16 +146,6 @@ class BrandSets
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

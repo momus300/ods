@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CiosRecommended
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
@@ -20,38 +29,19 @@ class CiosRecommended
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \ActivityEmailHistory
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasDatas
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasDatas")
+     * @ORM\ManyToOne(targetEntity="ActivityEmailHistory")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pas_datas_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="activity_email_history_id", referencedColumnName="id")
      * })
      */
-    private $pasDatas;
+    private $activityEmailHistory;
 
     /**
-     * @var \AppBundle\Entity\CcConfigurations
+     * @var \CcConfigurationEquipment
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
-     * })
-     */
-    private $ccConfiguration;
-
-    /**
-     * @var \AppBundle\Entity\CcConfigurationEquipment
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurationEquipment")
+     * @ORM\ManyToOne(targetEntity="CcConfigurationEquipment")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cc_configuration_equipment_id", referencedColumnName="id")
      * })
@@ -59,16 +49,36 @@ class CiosRecommended
     private $ccConfigurationEquipment;
 
     /**
-     * @var \AppBundle\Entity\ActivityEmailHistory
+     * @var \CcConfigurations
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ActivityEmailHistory")
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="activity_email_history_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
      * })
      */
-    private $activityEmailHistory;
+    private $ccConfiguration;
+
+    /**
+     * @var \PasDatas
+     *
+     * @ORM\ManyToOne(targetEntity="PasDatas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pas_datas_id", referencedColumnName="id")
+     * })
+     */
+    private $pasDatas;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set created
@@ -95,61 +105,27 @@ class CiosRecommended
     }
 
     /**
-     * Get id
+     * Set activityEmailHistory
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set pasDatas
-     *
-     * @param \AppBundle\Entity\PasDatas $pasDatas
+     * @param \AppBundle\Entity\ActivityEmailHistory $activityEmailHistory
      *
      * @return CiosRecommended
      */
-    public function setPasDatas(\AppBundle\Entity\PasDatas $pasDatas = null)
+    public function setActivityEmailHistory(\AppBundle\Entity\ActivityEmailHistory $activityEmailHistory = null)
     {
-        $this->pasDatas = $pasDatas;
+        $this->activityEmailHistory = $activityEmailHistory;
 
         return $this;
     }
 
     /**
-     * Get pasDatas
+     * Get activityEmailHistory
      *
-     * @return \AppBundle\Entity\PasDatas
+     * @return \AppBundle\Entity\ActivityEmailHistory
      */
-    public function getPasDatas()
+    public function getActivityEmailHistory()
     {
-        return $this->pasDatas;
-    }
-
-    /**
-     * Set ccConfiguration
-     *
-     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
-     *
-     * @return CiosRecommended
-     */
-    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
-    {
-        $this->ccConfiguration = $ccConfiguration;
-
-        return $this;
-    }
-
-    /**
-     * Get ccConfiguration
-     *
-     * @return \AppBundle\Entity\CcConfigurations
-     */
-    public function getCcConfiguration()
-    {
-        return $this->ccConfiguration;
+        return $this->activityEmailHistory;
     }
 
     /**
@@ -177,26 +153,50 @@ class CiosRecommended
     }
 
     /**
-     * Set activityEmailHistory
+     * Set ccConfiguration
      *
-     * @param \AppBundle\Entity\ActivityEmailHistory $activityEmailHistory
+     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
      *
      * @return CiosRecommended
      */
-    public function setActivityEmailHistory(\AppBundle\Entity\ActivityEmailHistory $activityEmailHistory = null)
+    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
     {
-        $this->activityEmailHistory = $activityEmailHistory;
+        $this->ccConfiguration = $ccConfiguration;
 
         return $this;
     }
 
     /**
-     * Get activityEmailHistory
+     * Get ccConfiguration
      *
-     * @return \AppBundle\Entity\ActivityEmailHistory
+     * @return \AppBundle\Entity\CcConfigurations
      */
-    public function getActivityEmailHistory()
+    public function getCcConfiguration()
     {
-        return $this->activityEmailHistory;
+        return $this->ccConfiguration;
+    }
+
+    /**
+     * Set pasDatas
+     *
+     * @param \AppBundle\Entity\PasDatas $pasDatas
+     *
+     * @return CiosRecommended
+     */
+    public function setPasDatas(\AppBundle\Entity\PasDatas $pasDatas = null)
+    {
+        $this->pasDatas = $pasDatas;
+
+        return $this;
+    }
+
+    /**
+     * Get pasDatas
+     *
+     * @return \AppBundle\Entity\PasDatas
+     */
+    public function getPasDatas()
+    {
+        return $this->pasDatas;
     }
 }

@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class PasCategories
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
@@ -76,18 +85,9 @@ class PasCategories
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \PasCategories
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasCategories
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasCategories")
+     * @ORM\ManyToOne(targetEntity="PasCategories")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      * })
@@ -95,6 +95,16 @@ class PasCategories
     private $parent;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -310,16 +320,6 @@ class PasCategories
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

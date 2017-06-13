@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ActivityExportDefs
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=false)
@@ -48,33 +57,9 @@ class ActivityExportDefs
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", inversedBy="activityExportDef")
-     * @ORM\JoinTable(name="activity_export_def_application",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $application;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", inversedBy="activityExportDef")
+     * @ORM\ManyToMany(targetEntity="Activities", inversedBy="activityExportDef")
      * @ORM\JoinTable(name="activity_export_def_activity",
      *   joinColumns={
      *     @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
@@ -87,14 +72,39 @@ class ActivityExportDefs
     private $activity;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Applications", inversedBy="activityExportDef")
+     * @ORM\JoinTable(name="activity_export_def_application",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $application;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -217,13 +227,37 @@ class ActivityExportDefs
     }
 
     /**
-     * Get id
+     * Add activity
      *
-     * @return integer
+     * @param \AppBundle\Entity\Activities $activity
+     *
+     * @return ActivityExportDefs
      */
-    public function getId()
+    public function addActivity(\AppBundle\Entity\Activities $activity)
     {
-        return $this->id;
+        $this->activity[] = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Remove activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     */
+    public function removeActivity(\AppBundle\Entity\Activities $activity)
+    {
+        $this->activity->removeElement($activity);
+    }
+
+    /**
+     * Get activity
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getActivity()
+    {
+        return $this->activity;
     }
 
     /**
@@ -258,39 +292,5 @@ class ActivityExportDefs
     public function getApplication()
     {
         return $this->application;
-    }
-
-    /**
-     * Add activity
-     *
-     * @param \AppBundle\Entity\Activities $activity
-     *
-     * @return ActivityExportDefs
-     */
-    public function addActivity(\AppBundle\Entity\Activities $activity)
-    {
-        $this->activity[] = $activity;
-
-        return $this;
-    }
-
-    /**
-     * Remove activity
-     *
-     * @param \AppBundle\Entity\Activities $activity
-     */
-    public function removeActivity(\AppBundle\Entity\Activities $activity)
-    {
-        $this->activity->removeElement($activity);
-    }
-
-    /**
-     * Get activity
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getActivity()
-    {
-        return $this->activity;
     }
 }

@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class GiodoDefinition
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
@@ -76,25 +85,24 @@ class GiodoDefinition
     private $modified;
 
     /**
-     * @var integer
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToMany(targetEntity="Activities", inversedBy="giodoDefinition")
+     * @ORM\JoinTable(name="activity_giodo",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="giodo_definition_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   }
+     * )
      */
-    private $id;
+    private $activity;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Leads", mappedBy="giodoDefinition")
-     */
-    private $lead;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\CustomerActivities", inversedBy="giodoDefinition")
+     * @ORM\ManyToMany(targetEntity="CustomerActivities", inversedBy="giodoDefinition")
      * @ORM\JoinTable(name="customer_activity_giodo",
      *   joinColumns={
      *     @ORM\JoinColumn(name="giodo_definition_id", referencedColumnName="id")
@@ -109,28 +117,30 @@ class GiodoDefinition
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", inversedBy="giodoDefinition")
-     * @ORM\JoinTable(name="activity_giodo",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="giodo_definition_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="Leads", mappedBy="giodoDefinition")
      */
-    private $activity;
+    private $lead;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->customerActivity = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->customerActivity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -349,47 +359,37 @@ class GiodoDefinition
     }
 
     /**
-     * Get id
+     * Add activity
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Add lead
-     *
-     * @param \AppBundle\Entity\Leads $lead
+     * @param \AppBundle\Entity\Activities $activity
      *
      * @return GiodoDefinition
      */
-    public function addLead(\AppBundle\Entity\Leads $lead)
+    public function addActivity(\AppBundle\Entity\Activities $activity)
     {
-        $this->lead[] = $lead;
+        $this->activity[] = $activity;
 
         return $this;
     }
 
     /**
-     * Remove lead
+     * Remove activity
      *
-     * @param \AppBundle\Entity\Leads $lead
+     * @param \AppBundle\Entity\Activities $activity
      */
-    public function removeLead(\AppBundle\Entity\Leads $lead)
+    public function removeActivity(\AppBundle\Entity\Activities $activity)
     {
-        $this->lead->removeElement($lead);
+        $this->activity->removeElement($activity);
     }
 
     /**
-     * Get lead
+     * Get activity
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getLead()
+    public function getActivity()
     {
-        return $this->lead;
+        return $this->activity;
     }
 
     /**
@@ -427,36 +427,36 @@ class GiodoDefinition
     }
 
     /**
-     * Add activity
+     * Add lead
      *
-     * @param \AppBundle\Entity\Activities $activity
+     * @param \AppBundle\Entity\Leads $lead
      *
      * @return GiodoDefinition
      */
-    public function addActivity(\AppBundle\Entity\Activities $activity)
+    public function addLead(\AppBundle\Entity\Leads $lead)
     {
-        $this->activity[] = $activity;
+        $this->lead[] = $lead;
 
         return $this;
     }
 
     /**
-     * Remove activity
+     * Remove lead
      *
-     * @param \AppBundle\Entity\Activities $activity
+     * @param \AppBundle\Entity\Leads $lead
      */
-    public function removeActivity(\AppBundle\Entity\Activities $activity)
+    public function removeLead(\AppBundle\Entity\Leads $lead)
     {
-        $this->activity->removeElement($activity);
+        $this->lead->removeElement($lead);
     }
 
     /**
-     * Get activity
+     * Get lead
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getActivity()
+    public function getLead()
     {
-        return $this->activity;
+        return $this->lead;
     }
 }

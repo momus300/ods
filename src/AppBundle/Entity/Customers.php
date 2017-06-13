@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Customers
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="fname", type="string", length=30, nullable=true)
@@ -321,18 +330,9 @@ class Customers
     private $test = '0';
 
     /**
-     * @var integer
+     * @var \BrandSets
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\BrandSets
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\BrandSets")
+     * @ORM\ManyToOne(targetEntity="BrandSets")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
      * })
@@ -342,26 +342,36 @@ class Customers
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ApplicationAuthTypes", mappedBy="customer")
-     */
-    private $authType;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Campaigns", mappedBy="customer")
+     * @ORM\ManyToMany(targetEntity="Campaigns", mappedBy="customer")
      */
     private $campaign;
+
+//    /**
+//     * @var \Doctrine\Common\Collections\Collection
+//     *
+//     * @ORM\ManyToMany(targetEntity="ApplicationAuthTypes", mappedBy="customer")
+//     */
+//    private $authType;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->authType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->campaign = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authType = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set fname
@@ -1420,16 +1430,6 @@ class Customers
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set brandSet
      *
      * @param \AppBundle\Entity\BrandSets $brandSet
@@ -1451,40 +1451,6 @@ class Customers
     public function getBrandSet()
     {
         return $this->brandSet;
-    }
-
-    /**
-     * Add authType
-     *
-     * @param \AppBundle\Entity\ApplicationAuthTypes $authType
-     *
-     * @return Customers
-     */
-    public function addAuthType(\AppBundle\Entity\ApplicationAuthTypes $authType)
-    {
-        $this->authType[] = $authType;
-
-        return $this;
-    }
-
-    /**
-     * Remove authType
-     *
-     * @param \AppBundle\Entity\ApplicationAuthTypes $authType
-     */
-    public function removeAuthType(\AppBundle\Entity\ApplicationAuthTypes $authType)
-    {
-        $this->authType->removeElement($authType);
-    }
-
-    /**
-     * Get authType
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAuthType()
-    {
-        return $this->authType;
     }
 
     /**

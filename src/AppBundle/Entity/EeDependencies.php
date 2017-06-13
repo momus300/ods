@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class EeDependencies
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=100, nullable=false)
@@ -55,18 +64,9 @@ class EeDependencies
     private $activeEnd;
 
     /**
-     * @var integer
+     * @var \PasDatas
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasDatas
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasDatas")
+     * @ORM\ManyToOne(targetEntity="PasDatas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pas_data_id", referencedColumnName="id")
      * })
@@ -74,6 +74,16 @@ class EeDependencies
     private $pasData;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -217,16 +227,6 @@ class EeDependencies
     public function getActiveEnd()
     {
         return $this->activeEnd;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

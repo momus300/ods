@@ -38,6 +38,7 @@ date</option>
       </options>
     </field>
     <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-many field="lead" target-entity="Leads" mapped-by="activityDataDef" fetch="LAZY"/>
     <many-to-many field="activity" target-entity="Activities" mapped-by="data" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

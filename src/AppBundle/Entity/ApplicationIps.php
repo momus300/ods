@@ -8,32 +8,32 @@ use Doctrine\ORM\Mapping as ORM;
  * ApplicationIps
  *
  * @ORM\Table(name="application_ips", indexes={@ORM\Index(name="IDX_D04BA5593E030ACD", columns={"application_id"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\ApplicationIpsRepository")
+ * @ORM\Entity
  */
 class ApplicationIps
 {
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
-
-    /**
      * @var string
      *
-     * @ORM\Column(name="ip", type="string", length=15)
+     * @ORM\Column(name="ip", type="string", length=15, nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $ip;
 
     /**
-     * @var \AppBundle\Entity\Applications
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=false)
+     */
+    private $created = 'CURRENT_TIMESTAMP';
+
+    /**
+     * @var \Applications
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\OneToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
@@ -41,30 +41,6 @@ class ApplicationIps
     private $application;
 
 
-
-    /**
-     * Set created
-     *
-     * @ORM\PrePersist()
-     *
-     * @return ApplicationIps
-     */
-    public function setCreated()
-    {
-        $this->created = new \DateTime();
-
-        return $this;
-    }
-
-    /**
-     * Get created
-     *
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
 
     /**
      * Set ip
@@ -88,6 +64,30 @@ class ApplicationIps
     public function getIp()
     {
         return $this->ip;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     *
+     * @return ApplicationIps
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+
+        return $this;
+    }
+
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
     }
 
     /**

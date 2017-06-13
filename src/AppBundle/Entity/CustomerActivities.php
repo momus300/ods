@@ -15,6 +15,15 @@ class CustomerActivities
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="customer_activity_import_id", type="integer", nullable=true)
      */
     private $customerActivityImportId;
@@ -55,38 +64,9 @@ class CustomerActivities
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \Customers
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\CcConfigurations
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
-     * })
-     */
-    private $ccConfiguration;
-
-    /**
-     * @var \AppBundle\Entity\Sessions
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Sessions")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="session_id", referencedColumnName="id")
-     * })
-     */
-    private $session;
-
-    /**
-     * @var \AppBundle\Entity\Customers
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\ManyToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * })
@@ -94,29 +74,9 @@ class CustomerActivities
     private $customer;
 
     /**
-     * @var \AppBundle\Entity\ApplicationActivities
+     * @var \Activities
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApplicationActivities")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="application_id", referencedColumnName="application_id")
-     * })
-     */
-    private $application;
-
-    /**
-     * @var \AppBundle\Entity\ActivitySources
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ActivitySources")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="activity_source_id", referencedColumnName="id")
-     * })
-     */
-    private $activitySource;
-
-    /**
-     * @var \AppBundle\Entity\Activities
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Activities")
+     * @ORM\ManyToOne(targetEntity="Activities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
      * })
@@ -124,11 +84,58 @@ class CustomerActivities
     private $activity;
 
     /**
+     * @var \ActivitySources
+     *
+     * @ORM\ManyToOne(targetEntity="ActivitySources")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="activity_source_id", referencedColumnName="id")
+     * })
+     */
+    private $activitySource;
+
+//    /**
+//     * @var \ApplicationActivities
+//     *
+//     * @ORM\ManyToOne(targetEntity="ApplicationActivities")
+//     * @ORM\JoinColumns({
+//     *   @ORM\JoinColumn(name="application_id", referencedColumnName="application_id")
+//     * })
+//     */
+//    private $application;
+
+    /**
+     * @var \CcConfigurations
+     *
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
+     * })
+     */
+    private $ccConfiguration;
+
+    /**
+     * @var \Sessions
+     *
+     * @ORM\ManyToOne(targetEntity="Sessions")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * })
+     */
+    private $session;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\GiodoDefinition", mappedBy="customerActivity")
+     * @ORM\ManyToMany(targetEntity="GiodoDefinition", mappedBy="customerActivity")
      */
     private $giodoDefinition;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Leads", mappedBy="customerActivity")
+     */
+    private $lead;
 
     /**
      * Constructor
@@ -136,8 +143,19 @@ class CustomerActivities
     public function __construct()
     {
         $this->giodoDefinition = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set customerActivityImportId
@@ -284,13 +302,99 @@ class CustomerActivities
     }
 
     /**
-     * Get id
+     * Set customer
      *
-     * @return integer
+     * @param \AppBundle\Entity\Customers $customer
+     *
+     * @return CustomerActivities
      */
-    public function getId()
+    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
     {
-        return $this->id;
+        $this->customer = $customer;
+
+        return $this;
+    }
+
+    /**
+     * Get customer
+     *
+     * @return \AppBundle\Entity\Customers
+     */
+    public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set activity
+     *
+     * @param \AppBundle\Entity\Activities $activity
+     *
+     * @return CustomerActivities
+     */
+    public function setActivity(\AppBundle\Entity\Activities $activity = null)
+    {
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return \AppBundle\Entity\Activities
+     */
+    public function getActivity()
+    {
+        return $this->activity;
+    }
+
+    /**
+     * Set activitySource
+     *
+     * @param \AppBundle\Entity\ActivitySources $activitySource
+     *
+     * @return CustomerActivities
+     */
+    public function setActivitySource(\AppBundle\Entity\ActivitySources $activitySource = null)
+    {
+        $this->activitySource = $activitySource;
+
+        return $this;
+    }
+
+    /**
+     * Get activitySource
+     *
+     * @return \AppBundle\Entity\ActivitySources
+     */
+    public function getActivitySource()
+    {
+        return $this->activitySource;
+    }
+
+    /**
+     * Set application
+     *
+     * @param \AppBundle\Entity\ApplicationActivities $application
+     *
+     * @return CustomerActivities
+     */
+    public function setApplication(\AppBundle\Entity\ApplicationActivities $application = null)
+    {
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get application
+     *
+     * @return \AppBundle\Entity\ApplicationActivities
+     */
+    public function getApplication()
+    {
+        return $this->application;
     }
 
     /**
@@ -342,102 +446,6 @@ class CustomerActivities
     }
 
     /**
-     * Set customer
-     *
-     * @param \AppBundle\Entity\Customers $customer
-     *
-     * @return CustomerActivities
-     */
-    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Get customer
-     *
-     * @return \AppBundle\Entity\Customers
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
-    }
-
-    /**
-     * Set application
-     *
-     * @param \AppBundle\Entity\ApplicationActivities $application
-     *
-     * @return CustomerActivities
-     */
-    public function setApplication(\AppBundle\Entity\ApplicationActivities $application = null)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get application
-     *
-     * @return \AppBundle\Entity\ApplicationActivities
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * Set activitySource
-     *
-     * @param \AppBundle\Entity\ActivitySources $activitySource
-     *
-     * @return CustomerActivities
-     */
-    public function setActivitySource(\AppBundle\Entity\ActivitySources $activitySource = null)
-    {
-        $this->activitySource = $activitySource;
-
-        return $this;
-    }
-
-    /**
-     * Get activitySource
-     *
-     * @return \AppBundle\Entity\ActivitySources
-     */
-    public function getActivitySource()
-    {
-        return $this->activitySource;
-    }
-
-    /**
-     * Set activity
-     *
-     * @param \AppBundle\Entity\Activities $activity
-     *
-     * @return CustomerActivities
-     */
-    public function setActivity(\AppBundle\Entity\Activities $activity = null)
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
-    /**
-     * Get activity
-     *
-     * @return \AppBundle\Entity\Activities
-     */
-    public function getActivity()
-    {
-        return $this->activity;
-    }
-
-    /**
      * Add giodoDefinition
      *
      * @param \AppBundle\Entity\GiodoDefinition $giodoDefinition
@@ -469,5 +477,39 @@ class CustomerActivities
     public function getGiodoDefinition()
     {
         return $this->giodoDefinition;
+    }
+
+    /**
+     * Add lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     *
+     * @return CustomerActivities
+     */
+    public function addLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead[] = $lead;
+
+        return $this;
+    }
+
+    /**
+     * Remove lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     */
+    public function removeLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead->removeElement($lead);
+    }
+
+    /**
+     * Get lead
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLead()
+    {
+        return $this->lead;
     }
 }

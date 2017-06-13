@@ -187,5 +187,6 @@
         <join-column name="application_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
+    <many-to-many field="lead" target-entity="Leads" mapped-by="ccConfiguration" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

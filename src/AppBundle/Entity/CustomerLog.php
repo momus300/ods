@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerLog
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="field", type="string", length=25, nullable=false)
@@ -34,35 +43,36 @@ class CustomerLog
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \Applications
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Customers
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
-     * })
-     */
-    private $customer;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
      */
     private $application;
 
+    /**
+     * @var \Customers
+     *
+     * @ORM\ManyToOne(targetEntity="Customers")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     * })
+     */
+    private $customer;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set field
@@ -137,13 +147,27 @@ class CustomerLog
     }
 
     /**
-     * Get id
+     * Set application
      *
-     * @return integer
+     * @param \AppBundle\Entity\Applications $application
+     *
+     * @return CustomerLog
      */
-    public function getId()
+    public function setApplication(\AppBundle\Entity\Applications $application = null)
     {
-        return $this->id;
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get application
+     *
+     * @return \AppBundle\Entity\Applications
+     */
+    public function getApplication()
+    {
+        return $this->application;
     }
 
     /**
@@ -168,29 +192,5 @@ class CustomerLog
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * Set application
-     *
-     * @param \AppBundle\Entity\Applications $application
-     *
-     * @return CustomerLog
-     */
-    public function setApplication(\AppBundle\Entity\Applications $application = null)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get application
-     *
-     * @return \AppBundle\Entity\Applications
-     */
-    public function getApplication()
-    {
-        return $this->application;
     }
 }

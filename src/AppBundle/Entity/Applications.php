@@ -7,11 +7,27 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Applications
  *
- * @ORM\Table(name="applications", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"app_id"}), @ORM\UniqueConstraint(name="public_key_UNIQUE", columns={"public_key"}), @ORM\UniqueConstraint(name="admin_key_UNIQUE", columns={"admin_key"}), @ORM\UniqueConstraint(name="application_id_brand_set_id", columns={"id", "brand_set_id"})}, indexes={@ORM\Index(name="ind_active_start_end", columns={"active", "active_start", "active_end"}), @ORM\Index(name="fk_applications_campaigns", columns={"campaign_id"}), @ORM\Index(name="fk_applications_brand_sets1_idx", columns={"brand_set_id"}), @ORM\Index(name="fk_applications_comapnies1_idx", columns={"company_id"}), @ORM\Index(name="fk_applications_report_areas1", columns={"report_area_id"}), @ORM\Index(name="report_category_id", columns={"report_category_id"})})
+ * @ORM\Table(name="applications", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"app_id"}), @ORM\UniqueConstraint(name="public_key_UNIQUE", columns={"public_key"}), @ORM\UniqueConstraint(name="admin_key_UNIQUE", columns={"admin_key"}), @ORM\UniqueConstraint(name="application_id_brand_set_id", columns={"id", "brand_set_id"})}, indexes={@ORM\Index(name="ind_active_start_end", columns={"active", "active_start", "active_end"}), @ORM\Index(name="fk_applications_campaigns", columns={"campaign_id"}), @ORM\Index(name="fk_applications_comapnies1_idx", columns={"company_id"}), @ORM\Index(name="fk_applications_report_areas1", columns={"report_area_id"}), @ORM\Index(name="report_category_id", columns={"report_category_id"})})
  * @ORM\Entity
  */
 class Applications
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="brand_set_id", type="integer", nullable=false)
+     */
+    private $brandSetId;
+
     /**
      * @var string
      *
@@ -57,7 +73,7 @@ class Applications
     /**
      * @var integer
      *
-     * @ORM\Column(name="`order`", type="integer", nullable=false)
+     * @ORM\Column(name="order", type="integer", nullable=false)
      */
     private $order = '1';
 
@@ -94,7 +110,7 @@ class Applications
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created;
+    private $created = 'CURRENT_TIMESTAMP';
 
     /**
      * @var \DateTime
@@ -104,18 +120,9 @@ class Applications
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Campaigns
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Campaigns
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Campaigns")
+     * @ORM\ManyToOne(targetEntity="Campaigns")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
      * })
@@ -123,9 +130,19 @@ class Applications
     private $campaign;
 
     /**
-     * @var \AppBundle\Entity\Companies
+     * @var \ReportCategories
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Companies")
+     * @ORM\ManyToOne(targetEntity="ReportCategories")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="report_category_id", referencedColumnName="id")
+     * })
+     */
+    private $reportCategory;
+
+    /**
+     * @var \Companies
+     *
+     * @ORM\ManyToOne(targetEntity="Companies")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="company_id", referencedColumnName="id")
      * })
@@ -133,33 +150,26 @@ class Applications
     private $company;
 
     /**
-     * @var \AppBundle\Entity\BrandSets
+     * @var \ReportAreas
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\BrandSets")
+     * @ORM\ManyToOne(targetEntity="ReportAreas")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="report_area_id", referencedColumnName="id")
      * })
      */
-    private $brandSet;
+    private $reportArea;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\AuthTypes", mappedBy="application")
-     */
-    private $authType;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ActivityExportDefs", mappedBy="application")
+     * @ORM\ManyToMany(targetEntity="ActivityExportDefs", mappedBy="application")
      */
     private $activityExportDef;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", inversedBy="application")
+     * @ORM\ManyToMany(targetEntity="Activities", inversedBy="application")
      * @ORM\JoinTable(name="application_activities",
      *   joinColumns={
      *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
@@ -172,16 +182,80 @@ class Applications
     private $activity;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="AuthTypes", mappedBy="application")
+     */
+    private $authType;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Applications", inversedBy="application")
+     * @ORM\JoinTable(name="linked_applications",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="linked_application_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $linkedApplication;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Methods", mappedBy="application")
+     */
+    private $method;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->authType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activityExportDef = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->authType = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->linkedApplication = new \Doctrine\Common\Collections\ArrayCollection();
         $this->method = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set brandSetId
+     *
+     * @param integer $brandSetId
+     *
+     * @return Applications
+     */
+    public function setBrandSetId($brandSetId)
+    {
+        $this->brandSetId = $brandSetId;
+
+        return $this;
+    }
+
+    /**
+     * Get brandSetId
+     *
+     * @return integer
+     */
+    public function getBrandSetId()
+    {
+        return $this->brandSetId;
+    }
 
     /**
      * Set name
@@ -450,13 +524,13 @@ class Applications
     /**
      * Set created
      *
-     * @ORM\PrePersist()
+     * @param \DateTime $created
      *
      * @return Applications
      */
-    public function setCreated()
+    public function setCreated($created)
     {
-        $this->created = new \DateTime();
+        $this->created = $created;
 
         return $this;
     }
@@ -474,13 +548,13 @@ class Applications
     /**
      * Set lastModified
      *
-     * @ORM\PreUpdate()
+     * @param \DateTime $lastModified
      *
      * @return Applications
      */
-    public function setLastModified()
+    public function setLastModified($lastModified)
     {
-        $this->lastModified = new \DateTime();
+        $this->lastModified = $lastModified;
 
         return $this;
     }
@@ -493,16 +567,6 @@ class Applications
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
@@ -530,6 +594,30 @@ class Applications
     }
 
     /**
+     * Set reportCategory
+     *
+     * @param \AppBundle\Entity\ReportCategories $reportCategory
+     *
+     * @return Applications
+     */
+    public function setReportCategory(\AppBundle\Entity\ReportCategories $reportCategory = null)
+    {
+        $this->reportCategory = $reportCategory;
+
+        return $this;
+    }
+
+    /**
+     * Get reportCategory
+     *
+     * @return \AppBundle\Entity\ReportCategories
+     */
+    public function getReportCategory()
+    {
+        return $this->reportCategory;
+    }
+
+    /**
      * Set company
      *
      * @param \AppBundle\Entity\Companies $company
@@ -554,61 +642,27 @@ class Applications
     }
 
     /**
-     * Set brandSet
+     * Set reportArea
      *
-     * @param \AppBundle\Entity\BrandSets $brandSet
+     * @param \AppBundle\Entity\ReportAreas $reportArea
      *
      * @return Applications
      */
-    public function setBrandSet(\AppBundle\Entity\BrandSets $brandSet = null)
+    public function setReportArea(\AppBundle\Entity\ReportAreas $reportArea = null)
     {
-        $this->brandSet = $brandSet;
+        $this->reportArea = $reportArea;
 
         return $this;
     }
 
     /**
-     * Get brandSet
+     * Get reportArea
      *
-     * @return \AppBundle\Entity\BrandSets
+     * @return \AppBundle\Entity\ReportAreas
      */
-    public function getBrandSet()
+    public function getReportArea()
     {
-        return $this->brandSet;
-    }
-
-    /**
-     * Add authType
-     *
-     * @param \AppBundle\Entity\AuthTypes $authType
-     *
-     * @return Applications
-     */
-    public function addAuthType(\AppBundle\Entity\AuthTypes $authType)
-    {
-        $this->authType[] = $authType;
-
-        return $this;
-    }
-
-    /**
-     * Remove authType
-     *
-     * @param \AppBundle\Entity\AuthTypes $authType
-     */
-    public function removeAuthType(\AppBundle\Entity\AuthTypes $authType)
-    {
-        $this->authType->removeElement($authType);
-    }
-
-    /**
-     * Get authType
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAuthType()
-    {
-        return $this->authType;
+        return $this->reportArea;
     }
 
     /**
@@ -680,20 +734,72 @@ class Applications
     }
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * Add authType
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Methods", inversedBy="application")
-     * @ORM\JoinTable(name="methods_application",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="method_id", referencedColumnName="id")
-     *   }
-     * )
+     * @param \AppBundle\Entity\AuthTypes $authType
+     *
+     * @return Applications
      */
-    private $method;
+    public function addAuthType(\AppBundle\Entity\AuthTypes $authType)
+    {
+        $this->authType[] = $authType;
 
+        return $this;
+    }
+
+    /**
+     * Remove authType
+     *
+     * @param \AppBundle\Entity\AuthTypes $authType
+     */
+    public function removeAuthType(\AppBundle\Entity\AuthTypes $authType)
+    {
+        $this->authType->removeElement($authType);
+    }
+
+    /**
+     * Get authType
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAuthType()
+    {
+        return $this->authType;
+    }
+
+    /**
+     * Add linkedApplication
+     *
+     * @param \AppBundle\Entity\Applications $linkedApplication
+     *
+     * @return Applications
+     */
+    public function addLinkedApplication(\AppBundle\Entity\Applications $linkedApplication)
+    {
+        $this->linkedApplication[] = $linkedApplication;
+
+        return $this;
+    }
+
+    /**
+     * Remove linkedApplication
+     *
+     * @param \AppBundle\Entity\Applications $linkedApplication
+     */
+    public function removeLinkedApplication(\AppBundle\Entity\Applications $linkedApplication)
+    {
+        $this->linkedApplication->removeElement($linkedApplication);
+    }
+
+    /**
+     * Get linkedApplication
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLinkedApplication()
+    {
+        return $this->linkedApplication;
+    }
 
     /**
      * Add method

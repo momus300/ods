@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class LeadMailings
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="content", type="text", length=65535, nullable=false)
@@ -34,18 +43,9 @@ class LeadMailings
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \Leads
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Leads
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Leads")
+     * @ORM\ManyToOne(targetEntity="Leads")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="lead_id", referencedColumnName="id")
      * })
@@ -53,6 +53,16 @@ class LeadMailings
     private $lead;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set content
@@ -124,16 +134,6 @@ class LeadMailings
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

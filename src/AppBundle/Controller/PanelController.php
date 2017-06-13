@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Activities;
 use AppBundle\Entity\ActivityDataDefs;
+use AppBundle\Entity\ActivityExportDefs;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
 use AppBundle\Entity\BrandSets;
@@ -65,10 +66,16 @@ class PanelController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Activities $data */
             $data = $form->getData();
+//            dump($data->getActivityExportDef());
+//            die();
             /** @var Applications $application */
             $application = $data->getApplication()[0];
             $application->addActivity($data);
+            /** @var ActivityExportDefs $activityEsportDef */
+            $activityEsportDef = $data->getActivityExportDef()[0];
+            $activityEsportDef->addActivity($data);
             $em = $this->getDoctrine()->getManager();
+            $em->persist($activityEsportDef);
             $em->persist($application);
             $em->persist($data);
             $em->flush();
@@ -195,8 +202,6 @@ class PanelController extends Controller
             $application = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $method =  $em->getRepository(Methods::class)->find(self::SET_ACTIVITY_METHOD);
-//            dump($method);
-//            die();
             $application->addMethod($method);
             $em->persist($method);
             $em->persist($application);

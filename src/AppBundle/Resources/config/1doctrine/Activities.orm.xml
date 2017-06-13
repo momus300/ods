@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-  <entity repository-class="AppBundle\Entity\ActivitiesRepository" name="AppBundle\Entity\Activities" table="activities">
+  <entity name="AppBundle\Entity\Activities" table="activities">
     <indexes>
       <index name="report_channel_id" columns="report_channel_id"/>
       <index name="report_group_id" columns="report_group_id"/>
@@ -81,7 +81,28 @@
       </options>
     </field>
     <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
+    <many-to-one field="reportChannel" target-entity="ReportChannels" fetch="LAZY">
+      <join-columns>
+        <join-column name="report_channel_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="reportGroup" target-entity="ReportGroups" fetch="LAZY">
+      <join-columns>
+        <join-column name="report_group_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="smsTemplate" target-entity="SmsTemplates" inversed-by="activity" fetch="LAZY">
+      <join-table name="activity_sms_triggers">
+        <join-columns>
+          <join-column name="activity_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="sms_template_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
     <many-to-many field="application" target-entity="Applications" mapped-by="activity" fetch="LAZY"/>
+    <many-to-many field="giodoDefinition" target-entity="GiodoDefinition" mapped-by="activity" fetch="LAZY"/>
     <many-to-many field="emailTemplate" target-entity="EmailTemplates" inversed-by="activity" fetch="LAZY">
       <join-table name="activity_email_triggers">
         <join-columns>

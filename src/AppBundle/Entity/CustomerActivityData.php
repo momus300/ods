@@ -34,23 +34,23 @@ class CustomerActivityData
     private $lastModified;
 
     /**
-     * @var \AppBundle\Entity\ActivityDataDefs
+     * @var \CustomerActivities
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ActivityDataDefs")
+     * @ORM\OneToOne(targetEntity="CustomerActivities")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="data_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="customer_activity_id", referencedColumnName="id")
      * })
      */
-    private $data;
+    private $customerActivity;
 
     /**
-     * @var \AppBundle\Entity\Activities
+     * @var \Activities
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Activities")
+     * @ORM\OneToOne(targetEntity="Activities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
      * })
@@ -58,16 +58,16 @@ class CustomerActivityData
     private $activity;
 
     /**
-     * @var \AppBundle\Entity\CustomerActivities
+     * @var \ActivityDataDefs
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\CustomerActivities")
+     * @ORM\OneToOne(targetEntity="ActivityDataDefs")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_activity_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="data_id", referencedColumnName="id")
      * })
      */
-    private $customerActivity;
+    private $data;
 
 
 
@@ -144,27 +144,27 @@ class CustomerActivityData
     }
 
     /**
-     * Set data
+     * Set customerActivity
      *
-     * @param \AppBundle\Entity\ActivityDataDefs $data
+     * @param \AppBundle\Entity\CustomerActivities $customerActivity
      *
      * @return CustomerActivityData
      */
-    public function setData(\AppBundle\Entity\ActivityDataDefs $data)
+    public function setCustomerActivity(\AppBundle\Entity\CustomerActivities $customerActivity)
     {
-        $this->data = $data;
+        $this->customerActivity = $customerActivity;
 
         return $this;
     }
 
     /**
-     * Get data
+     * Get customerActivity
      *
-     * @return \AppBundle\Entity\ActivityDataDefs
+     * @return \AppBundle\Entity\CustomerActivities
      */
-    public function getData()
+    public function getCustomerActivity()
     {
-        return $this->data;
+        return $this->customerActivity;
     }
 
     /**
@@ -192,26 +192,26 @@ class CustomerActivityData
     }
 
     /**
-     * Set customerActivity
+     * Set data
      *
-     * @param \AppBundle\Entity\CustomerActivities $customerActivity
+     * @param \AppBundle\Entity\ActivityDataDefs $data
      *
      * @return CustomerActivityData
      */
-    public function setCustomerActivity(\AppBundle\Entity\CustomerActivities $customerActivity)
+    public function setData(\AppBundle\Entity\ActivityDataDefs $data)
     {
-        $this->customerActivity = $customerActivity;
+        $this->data = $data;
 
         return $this;
     }
 
     /**
-     * Get customerActivity
+     * Get data
      *
-     * @return \AppBundle\Entity\CustomerActivities
+     * @return \AppBundle\Entity\ActivityDataDefs
      */
-    public function getCustomerActivity()
+    public function getData()
     {
-        return $this->customerActivity;
+        return $this->data;
     }
 }

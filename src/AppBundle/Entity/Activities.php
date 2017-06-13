@@ -8,10 +8,19 @@ use Doctrine\ORM\Mapping as ORM;
  * Activities
  *
  * @ORM\Table(name="activities", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"code"})}, indexes={@ORM\Index(name="report_channel_id", columns={"report_channel_id"}), @ORM\Index(name="report_group_id", columns={"report_group_id"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\ActivitiesRepository")
+ * @ORM\Entity
  */
 class Activities
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
     /**
      * @var string
      *
@@ -125,40 +134,29 @@ class Activities
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \ReportChannels
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToOne(targetEntity="ReportChannels")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="report_channel_id", referencedColumnName="id")
+     * })
      */
-    private $id;
+    private $reportChannel;
+
+    /**
+     * @var \ReportGroups
+     *
+     * @ORM\ManyToOne(targetEntity="ReportGroups")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="report_group_id", referencedColumnName="id")
+     * })
+     */
+    private $reportGroup;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", mappedBy="activity")
-     */
-    private $application;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\EmailTemplates", inversedBy="activity")
-     * @ORM\JoinTable(name="activity_email_triggers",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="email_template_id", referencedColumnName="id")
-     *   }
-     * )
-     */
-    private $emailTemplate;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ActivityDataDefs", inversedBy="activity")
+     * @ORM\ManyToMany(targetEntity="ActivityDataDefs", inversedBy="activity")
      * @ORM\JoinTable(name="activity_data",
      *   joinColumns={
      *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
@@ -173,21 +171,77 @@ class Activities
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\ActivityExportDefs", mappedBy="activity")
+     * @ORM\ManyToMany(targetEntity="EmailTemplates", inversedBy="activity")
+     * @ORM\JoinTable(name="activity_email_triggers",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="email_template_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $emailTemplate;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="ActivityExportDefs", mappedBy="activity")
      */
     private $activityExportDef;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="GiodoDefinition", mappedBy="activity")
+     */
+    private $giodoDefinition;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="SmsTemplates", inversedBy="activity")
+     * @ORM\JoinTable(name="activity_sms_triggers",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="sms_template_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $smsTemplate;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Applications", mappedBy="activity")
+     */
+    private $application;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->emailTemplate = new \Doctrine\Common\Collections\ArrayCollection();
         $this->data = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->emailTemplate = new \Doctrine\Common\Collections\ArrayCollection();
         $this->activityExportDef = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->giodoDefinition = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->smsTemplate = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -574,81 +628,51 @@ class Activities
     }
 
     /**
-     * Get id
+     * Set reportChannel
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Add application
-     *
-     * @param \AppBundle\Entity\Applications $application
+     * @param \AppBundle\Entity\ReportChannels $reportChannel
      *
      * @return Activities
      */
-    public function addApplication(\AppBundle\Entity\Applications $application)
+    public function setReportChannel(\AppBundle\Entity\ReportChannels $reportChannel = null)
     {
-        $this->application[] = $application;
+        $this->reportChannel = $reportChannel;
 
         return $this;
     }
 
     /**
-     * Remove application
+     * Get reportChannel
      *
-     * @param \AppBundle\Entity\Applications $application
+     * @return \AppBundle\Entity\ReportChannels
      */
-    public function removeApplication(\AppBundle\Entity\Applications $application)
+    public function getReportChannel()
     {
-        $this->application->removeElement($application);
+        return $this->reportChannel;
     }
 
     /**
-     * Get application
+     * Set reportGroup
      *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getApplication()
-    {
-        return $this->application;
-    }
-
-    /**
-     * Add emailTemplate
-     *
-     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     * @param \AppBundle\Entity\ReportGroups $reportGroup
      *
      * @return Activities
      */
-    public function addEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    public function setReportGroup(\AppBundle\Entity\ReportGroups $reportGroup = null)
     {
-        $this->emailTemplate[] = $emailTemplate;
+        $this->reportGroup = $reportGroup;
 
         return $this;
     }
 
     /**
-     * Remove emailTemplate
+     * Get reportGroup
      *
-     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     * @return \AppBundle\Entity\ReportGroups
      */
-    public function removeEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    public function getReportGroup()
     {
-        $this->emailTemplate->removeElement($emailTemplate);
-    }
-
-    /**
-     * Get emailTemplate
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getEmailTemplate()
-    {
-        return $this->emailTemplate;
+        return $this->reportGroup;
     }
 
     /**
@@ -686,6 +710,40 @@ class Activities
     }
 
     /**
+     * Add emailTemplate
+     *
+     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     *
+     * @return Activities
+     */
+    public function addEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    {
+        $this->emailTemplate[] = $emailTemplate;
+
+        return $this;
+    }
+
+    /**
+     * Remove emailTemplate
+     *
+     * @param \AppBundle\Entity\EmailTemplates $emailTemplate
+     */
+    public function removeEmailTemplate(\AppBundle\Entity\EmailTemplates $emailTemplate)
+    {
+        $this->emailTemplate->removeElement($emailTemplate);
+    }
+
+    /**
+     * Get emailTemplate
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getEmailTemplate()
+    {
+        return $this->emailTemplate;
+    }
+
+    /**
      * Add activityExportDef
      *
      * @param \AppBundle\Entity\ActivityExportDefs $activityExportDef
@@ -717,5 +775,107 @@ class Activities
     public function getActivityExportDef()
     {
         return $this->activityExportDef;
+    }
+
+    /**
+     * Add giodoDefinition
+     *
+     * @param \AppBundle\Entity\GiodoDefinition $giodoDefinition
+     *
+     * @return Activities
+     */
+    public function addGiodoDefinition(\AppBundle\Entity\GiodoDefinition $giodoDefinition)
+    {
+        $this->giodoDefinition[] = $giodoDefinition;
+
+        return $this;
+    }
+
+    /**
+     * Remove giodoDefinition
+     *
+     * @param \AppBundle\Entity\GiodoDefinition $giodoDefinition
+     */
+    public function removeGiodoDefinition(\AppBundle\Entity\GiodoDefinition $giodoDefinition)
+    {
+        $this->giodoDefinition->removeElement($giodoDefinition);
+    }
+
+    /**
+     * Get giodoDefinition
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGiodoDefinition()
+    {
+        return $this->giodoDefinition;
+    }
+
+    /**
+     * Add smsTemplate
+     *
+     * @param \AppBundle\Entity\SmsTemplates $smsTemplate
+     *
+     * @return Activities
+     */
+    public function addSmsTemplate(\AppBundle\Entity\SmsTemplates $smsTemplate)
+    {
+        $this->smsTemplate[] = $smsTemplate;
+
+        return $this;
+    }
+
+    /**
+     * Remove smsTemplate
+     *
+     * @param \AppBundle\Entity\SmsTemplates $smsTemplate
+     */
+    public function removeSmsTemplate(\AppBundle\Entity\SmsTemplates $smsTemplate)
+    {
+        $this->smsTemplate->removeElement($smsTemplate);
+    }
+
+    /**
+     * Get smsTemplate
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSmsTemplate()
+    {
+        return $this->smsTemplate;
+    }
+
+    /**
+     * Add application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     *
+     * @return Activities
+     */
+    public function addApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application[] = $application;
+
+        return $this;
+    }
+
+    /**
+     * Remove application
+     *
+     * @param \AppBundle\Entity\Applications $application
+     */
+    public function removeApplication(\AppBundle\Entity\Applications $application)
+    {
+        $this->application->removeElement($application);
+    }
+
+    /**
+     * Get application
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getApplication()
+    {
+        return $this->application;
     }
 }

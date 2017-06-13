@@ -27,23 +27,21 @@ class CustomerEcoupons
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \AppBundle\Entity\Ecoupons
+     * @var \CcConfigurations
      *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Ecoupons")
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ecoupon_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
      * })
      */
-    private $ecoupon;
+    private $ccConfiguration;
 
     /**
-     * @var \AppBundle\Entity\Customers
+     * @var \Customers
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\OneToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * })
@@ -51,14 +49,16 @@ class CustomerEcoupons
     private $customer;
 
     /**
-     * @var \AppBundle\Entity\CcConfigurations
+     * @var \Ecoupons
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="Ecoupons")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="ecoupon_id", referencedColumnName="id")
      * })
      */
-    private $ccConfiguration;
+    private $ecoupon;
 
 
 
@@ -111,27 +111,27 @@ class CustomerEcoupons
     }
 
     /**
-     * Set ecoupon
+     * Set ccConfiguration
      *
-     * @param \AppBundle\Entity\Ecoupons $ecoupon
+     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
      *
      * @return CustomerEcoupons
      */
-    public function setEcoupon(\AppBundle\Entity\Ecoupons $ecoupon)
+    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
     {
-        $this->ecoupon = $ecoupon;
+        $this->ccConfiguration = $ccConfiguration;
 
         return $this;
     }
 
     /**
-     * Get ecoupon
+     * Get ccConfiguration
      *
-     * @return \AppBundle\Entity\Ecoupons
+     * @return \AppBundle\Entity\CcConfigurations
      */
-    public function getEcoupon()
+    public function getCcConfiguration()
     {
-        return $this->ecoupon;
+        return $this->ccConfiguration;
     }
 
     /**
@@ -159,26 +159,26 @@ class CustomerEcoupons
     }
 
     /**
-     * Set ccConfiguration
+     * Set ecoupon
      *
-     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
+     * @param \AppBundle\Entity\Ecoupons $ecoupon
      *
      * @return CustomerEcoupons
      */
-    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
+    public function setEcoupon(\AppBundle\Entity\Ecoupons $ecoupon)
     {
-        $this->ccConfiguration = $ccConfiguration;
+        $this->ecoupon = $ecoupon;
 
         return $this;
     }
 
     /**
-     * Get ccConfiguration
+     * Get ecoupon
      *
-     * @return \AppBundle\Entity\CcConfigurations
+     * @return \AppBundle\Entity\Ecoupons
      */
-    public function getCcConfiguration()
+    public function getEcoupon()
     {
-        return $this->ccConfiguration;
+        return $this->ecoupon;
     }
 }

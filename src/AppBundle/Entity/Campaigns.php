@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Campaigns
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=250, nullable=false)
@@ -69,18 +78,9 @@ class Campaigns
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Customers", inversedBy="campaign")
+     * @ORM\ManyToMany(targetEntity="Customers", inversedBy="campaign")
      * @ORM\JoinTable(name="campaign_customers",
      *   joinColumns={
      *     @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
@@ -100,6 +100,16 @@ class Campaigns
         $this->customer = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -291,16 +301,6 @@ class Campaigns
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

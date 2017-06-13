@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CcConfigurations
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="model_key", type="string", length=6, nullable=false)
@@ -272,25 +281,40 @@ class CcConfigurations
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Applications
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
      */
     private $application;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Leads", mappedBy="ccConfiguration")
+     */
+    private $lead;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set modelKey
@@ -1181,16 +1205,6 @@ class CcConfigurations
     }
 
     /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set application
      *
      * @param \AppBundle\Entity\Applications $application
@@ -1212,5 +1226,39 @@ class CcConfigurations
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Add lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     *
+     * @return CcConfigurations
+     */
+    public function addLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead[] = $lead;
+
+        return $this;
+    }
+
+    /**
+     * Remove lead
+     *
+     * @param \AppBundle\Entity\Leads $lead
+     */
+    public function removeLead(\AppBundle\Entity\Leads $lead)
+    {
+        $this->lead->removeElement($lead);
+    }
+
+    /**
+     * Get lead
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLead()
+    {
+        return $this->lead;
     }
 }

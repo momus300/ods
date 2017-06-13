@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class StaticComponents
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=5, nullable=false)
@@ -83,35 +92,36 @@ class StaticComponents
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Applications
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Activities
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Activities")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
-     * })
-     */
-    private $activity;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
      */
     private $application;
 
+    /**
+     * @var \Activities
+     *
+     * @ORM\ManyToOne(targetEntity="Activities")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
+     * })
+     */
+    private $activity;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -354,13 +364,27 @@ class StaticComponents
     }
 
     /**
-     * Get id
+     * Set application
      *
-     * @return integer
+     * @param \AppBundle\Entity\Applications $application
+     *
+     * @return StaticComponents
      */
-    public function getId()
+    public function setApplication(\AppBundle\Entity\Applications $application = null)
     {
-        return $this->id;
+        $this->application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get application
+     *
+     * @return \AppBundle\Entity\Applications
+     */
+    public function getApplication()
+    {
+        return $this->application;
     }
 
     /**
@@ -385,29 +409,5 @@ class StaticComponents
     public function getActivity()
     {
         return $this->activity;
-    }
-
-    /**
-     * Set application
-     *
-     * @param \AppBundle\Entity\Applications $application
-     *
-     * @return StaticComponents
-     */
-    public function setApplication(\AppBundle\Entity\Applications $application = null)
-    {
-        $this->application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get application
-     *
-     * @return \AppBundle\Entity\Applications
-     */
-    public function getApplication()
-    {
-        return $this->application;
     }
 }
