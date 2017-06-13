@@ -1,9 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% block leftMenu %}
-    {% include 'leftMenu.html.twig' %}
-{% endblock %}
-
 {% block body %}
     <div class="row">
 
@@ -17,7 +13,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">Pokaz</button>
             </div>
         </form>
     </div>
@@ -37,7 +33,11 @@
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ data.code }}</td>
-                    <td>{{ data.name}}</td>
+                    <td>{{ data.name }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3"><p class="text-center">Brak eksportu danych do CRM</p></td>
                 </tr>
             {% endfor %}
             </tbody>

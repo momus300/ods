@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BrandSets
  *
  * @ORM\Table(name="brand_sets")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\BrandSetsRepository")
  */
 class BrandSets
 {
@@ -33,7 +33,7 @@ class BrandSets
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
      * @var \DateTime
@@ -103,13 +103,13 @@ class BrandSets
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @ORM\PrePersist()
      *
      * @return BrandSets
      */
-    public function setCreated($created)
+    public function setCreated()
     {
-        $this->created = $created;
+        $this->created = new \DateTime();
 
         return $this;
     }

@@ -21,3 +21,6 @@
 /var/sessions/
 /var/bootstrap.php.cache
 /var/SymfonyRequirements.php
+/app/config/parameters_text.yml
+/app/config/parameters_dev.yml
+/app/config/parameters_test.yml

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="applications", uniqueConstraints={@ORM\UniqueConstraint(name="code_UNIQUE", columns={"app_id"}), @ORM\UniqueConstraint(name="public_key_UNIQUE", columns={"public_key"}), @ORM\UniqueConstraint(name="admin_key_UNIQUE", columns={"admin_key"}), @ORM\UniqueConstraint(name="application_id_brand_set_id", columns={"id", "brand_set_id"})}, indexes={@ORM\Index(name="ind_active_start_end", columns={"active", "active_start", "active_end"}), @ORM\Index(name="fk_applications_campaigns", columns={"campaign_id"}), @ORM\Index(name="fk_applications_comapnies1_idx", columns={"company_id"}), @ORM\Index(name="fk_applications_report_areas1", columns={"report_area_id"}), @ORM\Index(name="report_category_id", columns={"report_category_id"})})
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  */
 class Applications
 {
@@ -22,11 +23,14 @@ class Applications
     private $id;
 
     /**
-     * @var integer
+     * @var \BrandSets
      *
-     * @ORM\Column(name="brand_set_id", type="integer", nullable=false)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\BrandSets")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
+     * })
      */
-    private $brandSetId;
+    private $brandSets;
 
     /**
      * @var string
@@ -73,7 +77,7 @@ class Applications
     /**
      * @var integer
      *
-     * @ORM\Column(name="order", type="integer", nullable=false)
+     * @ORM\Column(name="`order`", type="integer", nullable=false)
      */
     private $order = '1';
 
@@ -110,7 +114,7 @@ class Applications
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
      * @var \DateTime
@@ -236,13 +240,13 @@ class Applications
     /**
      * Set brandSetId
      *
-     * @param integer $brandSetId
+     * @param \AppBundle\Entity\BrandSets $brandSets
      *
      * @return Applications
      */
-    public function setBrandSetId($brandSetId)
+    public function setBrandSets($brandSets)
     {
-        $this->brandSetId = $brandSetId;
+        $this->brandSets = $brandSets;
 
         return $this;
     }
@@ -252,9 +256,9 @@ class Applications
      *
      * @return integer
      */
-    public function getBrandSetId()
+    public function getBrandSets()
     {
-        return $this->brandSetId;
+        return $this->brandSets;
     }
 
     /**
@@ -524,13 +528,13 @@ class Applications
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @ORM\PrePersist()
      *
      * @return Applications
      */
-    public function setCreated($created)
+    public function setCreated()
     {
-        $this->created = $created;
+        $this->created = new \DateTime();
 
         return $this;
     }
