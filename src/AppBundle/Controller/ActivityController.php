@@ -9,6 +9,7 @@ use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
 use AppBundle\Entity\BrandSets;
 use AppBundle\Entity\Methods;
+use AppBundle\Form\ActivityAddDataType;
 use AppBundle\Form\ActivityApplicationType;
 use AppBundle\Form\ApplicationsType;
 use AppBundle\Utils\CsvExport;
@@ -45,13 +46,15 @@ class ActivityController extends Controller
             /** @var Activities $data */
             $data = $form->getData();
             /** @var Applications $application */
-            $application = $data->getApplication()[0];
+            $application = $data->getApplication()->first();
             $application->addActivity($data);
             /** @var ActivityExportDefs $activityEsportDef */
-            $activityEsportDef = $data->getActivityExportDef()[0];
-            $activityEsportDef->addActivity($data);
+            $activityEsportDef = $data->getActivityExportDef()->first();
             $em = $this->getDoctrine()->getManager();
-            $em->persist($activityEsportDef);
+            if($activityEsportDef){
+                $activityEsportDef->addActivity($data);
+                $em->persist($activityEsportDef);
+            }
             $em->persist($application);
             $em->persist($data);
             $em->flush();
@@ -64,6 +67,38 @@ class ActivityController extends Controller
         return $this->render('@App/activity/add.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    public function addDataAction(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository('AppBundle:Activities');
+        $activities = $repository->findBy([], ['id' => 'DESC']);
+
+//        $activityDataDefs = $this->getDoctrine()->getRepository(ActivityDataDefs::class)->findBy([], null, 5);
+
+
+//        $activityDataDefs = new ActivityDataDefs();
+        $activityDataDefs = new Activities();
+        $form = $this->createForm(ActivityAddDataType::class, $activityDataDefs);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            dump($data);
+            die();
+        }
+//        if ($request->isMethod('post')) {
+//            $dataDef = $request->get('data_def');
+//            dump($dataDef);
+//            die();
+//            /** @var Activities $activityData */
+//            $activity = $repository->find($dataDef);
+//            $activityData = $activity->getData();
+//        }
+
+//        return $this->render('@App/activity/add-data.html.twig', ['activities' => $activities,  'activityDataDefs' => $activityDataDefs]);
+        return $this->render('@App/activity/add-data2.html.twig', ['form' => $form->createView()]);
+
     }
 
     public function dataAction(Request $request)

@@ -210,7 +210,15 @@ class Applications
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Methods", mappedBy="application")
+     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Methods", inversedBy="application")
+     * @ORM\JoinTable(name="methods_applications",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="method_id", referencedColumnName="id")
+     *   }
+     * )
      */
     private $method;
 

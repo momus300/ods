@@ -26,6 +26,10 @@ activity_add:
   path:     /aktywnosc/dodaj
   defaults: { _controller: AppBundle:Activity:add }
 
+activity_add_data:
+  path:     /aktywnosc/dodaj-dane
+  defaults: { _controller: AppBundle:Activity:addData }
+
 activity_data:
   path:     /aktywnosc/dane
   defaults: { _controller: AppBundle:Activity:data }

@@ -1,0 +1,24 @@
+{% spaceless %}
+{#<tr>#}
+    <td>1</td>
+    <td>
+        <div class="col-md-10">
+            <select name="data_def[]" class="form-control selectpicker">
+                {% for dataDef in activityDataDefs if activityDataDefs %}
+                    <option value="{{ dataDef.id }}">
+                        [{{ dataDef.id ~ ':' ~ dataDef.name }}
+                        ] {{ dataDef.description|e }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+    </td>
+    <td>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox">Wymagany
+            </label>
+        </div>
+    </td>
+{#</tr>#}
+{% endspaceless %}
