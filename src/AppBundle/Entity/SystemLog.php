@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class SystemLog
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ext_ip", type="string", length=15, nullable=false)
@@ -55,28 +64,19 @@ class SystemLog
     private $request;
 
     /**
-     * @var integer
+     * @var \Customers
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * })
      */
-    private $application;
+    private $customer;
 
     /**
-     * @var \AppBundle\Entity\SystemLogDefs
+     * @var \SystemLogDefs
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SystemLogDefs")
+     * @ORM\ManyToOne(targetEntity="SystemLogDefs")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="code_id", referencedColumnName="id")
      * })
@@ -84,16 +84,26 @@ class SystemLog
     private $code;
 
     /**
-     * @var \AppBundle\Entity\Customers
+     * @var \Applications
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
      */
-    private $customer;
+    private $application;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set extIp
@@ -240,37 +250,27 @@ class SystemLog
     }
 
     /**
-     * Get id
+     * Set customer
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set application
-     *
-     * @param \AppBundle\Entity\Applications $application
+     * @param \AppBundle\Entity\Customers $customer
      *
      * @return SystemLog
      */
-    public function setApplication(\AppBundle\Entity\Applications $application = null)
+    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
     {
-        $this->application = $application;
+        $this->customer = $customer;
 
         return $this;
     }
 
     /**
-     * Get application
+     * Get customer
      *
-     * @return \AppBundle\Entity\Applications
+     * @return \AppBundle\Entity\Customers
      */
-    public function getApplication()
+    public function getCustomer()
     {
-        return $this->application;
+        return $this->customer;
     }
 
     /**
@@ -298,26 +298,26 @@ class SystemLog
     }
 
     /**
-     * Set customer
+     * Set application
      *
-     * @param \AppBundle\Entity\Customers $customer
+     * @param \AppBundle\Entity\Applications $application
      *
      * @return SystemLog
      */
-    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
+    public function setApplication(\AppBundle\Entity\Applications $application = null)
     {
-        $this->customer = $customer;
+        $this->application = $application;
 
         return $this;
     }
 
     /**
-     * Get customer
+     * Get application
      *
-     * @return \AppBundle\Entity\Customers
+     * @return \AppBundle\Entity\Applications
      */
-    public function getCustomer()
+    public function getApplication()
     {
-        return $this->customer;
+        return $this->application;
     }
 }

@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Ecoupons
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=20, nullable=false)
@@ -55,18 +64,9 @@ class Ecoupons
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \EcouponGroups
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\EcouponGroups
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EcouponGroups")
+     * @ORM\ManyToOne(targetEntity="EcouponGroups")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="ecoupon_group_id", referencedColumnName="id")
      * })
@@ -74,6 +74,16 @@ class Ecoupons
     private $ecouponGroup;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -217,16 +227,6 @@ class Ecoupons
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Equipment
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=7, nullable=false)
@@ -41,18 +50,9 @@ class Equipment
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\EcouponGroups", mappedBy="equipment")
+     * @ORM\ManyToMany(targetEntity="EcouponGroups", mappedBy="equipment")
      */
     private $ecouponGroup;
 
@@ -64,6 +64,16 @@ class Equipment
         $this->ecouponGroup = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set code
@@ -159,16 +169,6 @@ class Equipment
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

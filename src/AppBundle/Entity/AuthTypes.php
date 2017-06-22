@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class AuthTypes
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=50, nullable=false)
@@ -83,18 +92,9 @@ class AuthTypes
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", inversedBy="authType")
+     * @ORM\ManyToMany(targetEntity="Applications", inversedBy="authType")
      * @ORM\JoinTable(name="application_auth_types",
      *   joinColumns={
      *     @ORM\JoinColumn(name="auth_type_id", referencedColumnName="id")
@@ -114,6 +114,16 @@ class AuthTypes
         $this->application = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set type
@@ -353,16 +363,6 @@ class AuthTypes
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

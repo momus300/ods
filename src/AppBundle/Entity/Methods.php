@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Methods
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=75, nullable=false)
@@ -62,18 +71,9 @@ class Methods
     private $isAdmin = '0';
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Applications", inversedBy="method")
+     * @ORM\ManyToMany(targetEntity="Applications", inversedBy="method")
      * @ORM\JoinTable(name="methods_applications",
      *   joinColumns={
      *     @ORM\JoinColumn(name="method_id", referencedColumnName="id")
@@ -93,6 +93,16 @@ class Methods
         $this->application = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -260,16 +270,6 @@ class Methods
     public function getIsAdmin()
     {
         return $this->isAdmin;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

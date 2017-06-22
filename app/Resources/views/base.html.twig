@@ -10,9 +10,9 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
     {% endblock %}
 </head>
-<body>
+<body style="background-color: {{ app.environment()=='prod'?'#da9494':app.environment()=='test'?'#e0d454':'#a5d082' }}">
 <div class="container">
-    <nav class="navbar navbar-default " role="navigation">
+    <nav class="navbar {{ app.environment()=='prod'?'navbar-inverse':'navbar-default' }}" role="navigation">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -22,11 +22,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ path('panel') }}">Panel</a>
+                <a class="navbar-brand" href="{{ path('panel') }}">Panel {{ app.environment()|upper }}</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    {% include 'topMenu.html.twig' %}
+                    {% include '@App/topMenu.html.twig' %}
                 </ul>
             </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="col-md-3">
             <div class="list-group">
                 {% block leftMenu %}
-                    {% include 'leftMenu.html.twig' %}
+                    {% include '@App/leftMenu.html.twig' %}
                 {% endblock %}
             </div>
         </div>

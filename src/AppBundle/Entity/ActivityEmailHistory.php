@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ActivityEmailHistory
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="sender_email", type="string", length=80, nullable=false)
@@ -90,35 +99,36 @@ class ActivityEmailHistory
     private $status = '-1';
 
     /**
-     * @var integer
+     * @var \Activities
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\EmailTemplates
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\EmailTemplates")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="template_id", referencedColumnName="id")
-     * })
-     */
-    private $template;
-
-    /**
-     * @var \AppBundle\Entity\Activities
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Activities")
+     * @ORM\ManyToOne(targetEntity="Activities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
      * })
      */
     private $activity;
 
+    /**
+     * @var \EmailTemplates
+     *
+     * @ORM\ManyToOne(targetEntity="EmailTemplates")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="template_id", referencedColumnName="id")
+     * })
+     */
+    private $template;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set senderEmail
@@ -385,13 +395,27 @@ class ActivityEmailHistory
     }
 
     /**
-     * Get id
+     * Set activity
      *
-     * @return integer
+     * @param \AppBundle\Entity\Activities $activity
+     *
+     * @return ActivityEmailHistory
      */
-    public function getId()
+    public function setActivity(\AppBundle\Entity\Activities $activity = null)
     {
-        return $this->id;
+        $this->activity = $activity;
+
+        return $this;
+    }
+
+    /**
+     * Get activity
+     *
+     * @return \AppBundle\Entity\Activities
+     */
+    public function getActivity()
+    {
+        return $this->activity;
     }
 
     /**
@@ -416,29 +440,5 @@ class ActivityEmailHistory
     public function getTemplate()
     {
         return $this->template;
-    }
-
-    /**
-     * Set activity
-     *
-     * @param \AppBundle\Entity\Activities $activity
-     *
-     * @return ActivityEmailHistory
-     */
-    public function setActivity(\AppBundle\Entity\Activities $activity = null)
-    {
-        $this->activity = $activity;
-
-        return $this;
-    }
-
-    /**
-     * Get activity
-     *
-     * @return \AppBundle\Entity\Activities
-     */
-    public function getActivity()
-    {
-        return $this->activity;
     }
 }

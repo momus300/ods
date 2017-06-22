@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class DataSourceCustomers
 {
     /**
+     * @var string
+     *
+     * @ORM\Column(name="source_customer_id", type="string", length=30, nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $sourceCustomerId;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
@@ -27,39 +36,54 @@ class DataSourceCustomers
     private $lastModified;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="source_customer_id", type="string", length=30)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    private $sourceCustomerId;
-
-    /**
-     * @var \AppBundle\Entity\DataSources
+     * @var \Customers
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\DataSources")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="data_source_id", referencedColumnName="id")
-     * })
-     */
-    private $dataSource;
-
-    /**
-     * @var \AppBundle\Entity\Customers
-     *
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\OneToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * })
      */
     private $customer;
 
+    /**
+     * @var \DataSources
+     *
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\OneToOne(targetEntity="DataSources")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="data_source_id", referencedColumnName="id")
+     * })
+     */
+    private $dataSource;
 
+
+
+    /**
+     * Set sourceCustomerId
+     *
+     * @param string $sourceCustomerId
+     *
+     * @return DataSourceCustomers
+     */
+    public function setSourceCustomerId($sourceCustomerId)
+    {
+        $this->sourceCustomerId = $sourceCustomerId;
+
+        return $this;
+    }
+
+    /**
+     * Get sourceCustomerId
+     *
+     * @return string
+     */
+    public function getSourceCustomerId()
+    {
+        return $this->sourceCustomerId;
+    }
 
     /**
      * Set created
@@ -110,27 +134,27 @@ class DataSourceCustomers
     }
 
     /**
-     * Set sourceCustomerId
+     * Set customer
      *
-     * @param string $sourceCustomerId
+     * @param \AppBundle\Entity\Customers $customer
      *
      * @return DataSourceCustomers
      */
-    public function setSourceCustomerId($sourceCustomerId)
+    public function setCustomer(\AppBundle\Entity\Customers $customer)
     {
-        $this->sourceCustomerId = $sourceCustomerId;
+        $this->customer = $customer;
 
         return $this;
     }
 
     /**
-     * Get sourceCustomerId
+     * Get customer
      *
-     * @return string
+     * @return \AppBundle\Entity\Customers
      */
-    public function getSourceCustomerId()
+    public function getCustomer()
     {
-        return $this->sourceCustomerId;
+        return $this->customer;
     }
 
     /**
@@ -155,29 +179,5 @@ class DataSourceCustomers
     public function getDataSource()
     {
         return $this->dataSource;
-    }
-
-    /**
-     * Set customer
-     *
-     * @param \AppBundle\Entity\Customers $customer
-     *
-     * @return DataSourceCustomers
-     */
-    public function setCustomer(\AppBundle\Entity\Customers $customer)
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
-    /**
-     * Get customer
-     *
-     * @return \AppBundle\Entity\Customers
-     */
-    public function getCustomer()
-    {
-        return $this->customer;
     }
 }

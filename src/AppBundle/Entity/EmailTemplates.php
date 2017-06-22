@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class EmailTemplates
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=50, nullable=false)
@@ -76,18 +85,9 @@ class EmailTemplates
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Applications
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })
@@ -97,7 +97,7 @@ class EmailTemplates
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Activities", mappedBy="emailTemplate")
+     * @ORM\ManyToMany(targetEntity="Activities", mappedBy="emailTemplate")
      */
     private $activity;
 
@@ -109,6 +109,16 @@ class EmailTemplates
         $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -324,16 +334,6 @@ class EmailTemplates
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

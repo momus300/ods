@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ActivityDataValues
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="value", type="text", length=65535, nullable=false)
@@ -34,18 +43,9 @@ class ActivityDataValues
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \ActivityData
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\ActivityData
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ActivityData")
+     * @ORM\ManyToOne(targetEntity="ActivityData")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_id", referencedColumnName="activity_id"),
      *   @ORM\JoinColumn(name="data_id", referencedColumnName="data_id")
@@ -54,6 +54,16 @@ class ActivityDataValues
     private $activity;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set value
@@ -125,16 +135,6 @@ class ActivityDataValues
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

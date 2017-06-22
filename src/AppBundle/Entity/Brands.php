@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class Brands
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=20, nullable=false)
@@ -62,45 +71,46 @@ class Brands
     private $lastModified;
 
     /**
-     * @var integer
+     * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\ManyToMany(targetEntity="BrandSets", mappedBy="brand")
      */
-    private $id;
+    private $brandSet;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Users", mappedBy="brand")
-     */
-    private $user;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Dealers", mappedBy="brand")
+     * @ORM\ManyToMany(targetEntity="Dealers", mappedBy="brand")
      */
     private $dealer;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\BrandSets", mappedBy="brand")
+     * @ORM\ManyToMany(targetEntity="PasDatas", mappedBy="brand")
      */
-    private $brandSet;
+    private $pasData;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->user = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->dealer = new \Doctrine\Common\Collections\ArrayCollection();
         $this->brandSet = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dealer = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pasData = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -271,47 +281,37 @@ class Brands
     }
 
     /**
-     * Get id
+     * Add brandSet
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Add user
-     *
-     * @param \AppBundle\Entity\Users $user
+     * @param \AppBundle\Entity\BrandSets $brandSet
      *
      * @return Brands
      */
-    public function addUser(\AppBundle\Entity\Users $user)
+    public function addBrandSet(\AppBundle\Entity\BrandSets $brandSet)
     {
-        $this->user[] = $user;
+        $this->brandSet[] = $brandSet;
 
         return $this;
     }
 
     /**
-     * Remove user
+     * Remove brandSet
      *
-     * @param \AppBundle\Entity\Users $user
+     * @param \AppBundle\Entity\BrandSets $brandSet
      */
-    public function removeUser(\AppBundle\Entity\Users $user)
+    public function removeBrandSet(\AppBundle\Entity\BrandSets $brandSet)
     {
-        $this->user->removeElement($user);
+        $this->brandSet->removeElement($brandSet);
     }
 
     /**
-     * Get user
+     * Get brandSet
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getUser()
+    public function getBrandSet()
     {
-        return $this->user;
+        return $this->brandSet;
     }
 
     /**
@@ -349,36 +349,36 @@ class Brands
     }
 
     /**
-     * Add brandSet
+     * Add pasDatum
      *
-     * @param \AppBundle\Entity\BrandSets $brandSet
+     * @param \AppBundle\Entity\PasDatas $pasDatum
      *
      * @return Brands
      */
-    public function addBrandSet(\AppBundle\Entity\BrandSets $brandSet)
+    public function addPasDatum(\AppBundle\Entity\PasDatas $pasDatum)
     {
-        $this->brandSet[] = $brandSet;
+        $this->pasData[] = $pasDatum;
 
         return $this;
     }
 
     /**
-     * Remove brandSet
+     * Remove pasDatum
      *
-     * @param \AppBundle\Entity\BrandSets $brandSet
+     * @param \AppBundle\Entity\PasDatas $pasDatum
      */
-    public function removeBrandSet(\AppBundle\Entity\BrandSets $brandSet)
+    public function removePasDatum(\AppBundle\Entity\PasDatas $pasDatum)
     {
-        $this->brandSet->removeElement($brandSet);
+        $this->pasData->removeElement($pasDatum);
     }
 
     /**
-     * Get brandSet
+     * Get pasData
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getBrandSet()
+    public function getPasData()
     {
-        return $this->brandSet;
+        return $this->pasData;
     }
 }

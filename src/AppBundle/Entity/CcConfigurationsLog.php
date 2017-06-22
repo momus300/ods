@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CcConfigurationsLog
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="field", type="string", length=30, nullable=false)
@@ -34,18 +43,9 @@ class CcConfigurationsLog
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \CcConfigurations
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\CcConfigurations
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
      * })
@@ -53,6 +53,16 @@ class CcConfigurationsLog
     private $ccConfiguration;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set field
@@ -124,16 +134,6 @@ class CcConfigurationsLog
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

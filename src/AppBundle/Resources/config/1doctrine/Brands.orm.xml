@@ -40,7 +40,7 @@ Wymaga dodania triggera.</option>
       </options>
     </field>
     <field name="lastModified" type="datetime" column="last_modified" nullable="true"/>
-    <many-to-many field="user" target-entity="Users" mapped-by="brand" fetch="LAZY"/>
+    <many-to-many field="pasData" target-entity="PasDatas" mapped-by="brand" fetch="LAZY"/>
     <many-to-many field="dealer" target-entity="Dealers" mapped-by="brand" fetch="LAZY"/>
     <many-to-many field="brandSet" target-entity="BrandSets" mapped-by="brand" fetch="LAZY"/>
   </entity>

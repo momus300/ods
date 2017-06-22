@@ -102,16 +102,6 @@ class Users
     private $company;
 
     /**
-     * @var \AppBundle\Entity\PermissionsGroup
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PermissionsGroup")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="permissions_group_id", referencedColumnName="id")
-     * })
-     */
-    private $permissionsGroup;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Brands", inversedBy="user")
@@ -407,30 +397,6 @@ class Users
     public function getCompany()
     {
         return $this->company;
-    }
-
-    /**
-     * Set permissionsGroup
-     *
-     * @param \AppBundle\Entity\PermissionsGroup $permissionsGroup
-     *
-     * @return Users
-     */
-    public function setPermissionsGroup(\AppBundle\Entity\PermissionsGroup $permissionsGroup = null)
-    {
-        $this->permissionsGroup = $permissionsGroup;
-
-        return $this;
-    }
-
-    /**
-     * Get permissionsGroup
-     *
-     * @return \AppBundle\Entity\PermissionsGroup
-     */
-    public function getPermissionsGroup()
-    {
-        return $this->permissionsGroup;
     }
 
     /**

@@ -1,6 +1,47 @@
+#panel
+
 panel:
   path:     /
   defaults: { _controller: AppBundle:Panel:show }
+
+
+#aplikacja
+
+application_add:
+  path:     /aplikacja/dodaj
+  defaults: { _controller: AppBundle:Application:add }
+
+application_ip_addresses:
+  path:     /aplikacja/adresy-ip
+  defaults: { _controller: AppBundle:Application:ipAddresses }
+
+application_generate_codes:
+  path:     /aplikacja/generuj-kody
+  defaults: { _controller: AppBundle:Application:generateCodes }
+
+
+#Aktywnosc
+
+activity_add:
+  path:     /aktywnosc/dodaj
+  defaults: { _controller: AppBundle:Activity:add }
+
+activity_add_data:
+  path:     /aktywnosc/dodaj-dane
+  defaults: { _controller: AppBundle:Activity:addData }
+
+activity_data:
+  path:     /aktywnosc/dane
+  defaults: { _controller: AppBundle:Activity:data }
+
+#activity_data_id:
+#  path:     /aktywnosc/dane/{activity_id}
+#  defaults: { _controller: AppBundle:Panel:activityData }
+
+activity_export:
+  path:     /aktywnosc/eksport-do-crm
+  defaults: { _controller: AppBundle:Activity:export }
+
 
 activities:
   path:     /aktywnosci
@@ -8,57 +49,27 @@ activities:
 
 #adresy IP
 
-ip_addresses:
-  path:     /adresy-ip
-  defaults: { _controller: AppBundle:Panel:ipAddresses }
+#
+#ip_address_delete:
+#  path:     /adresy-ip/usun
+#  methods: [post]
+#  defaults: { _controller: AppBundle:Panel:ipAddressDelete }
+#
+#
+#ip_address_add:
+#  path:     /adresy-ip/dodaj/{id}
+#  defaults: { _controller: AppBundle:Panel:ipAddressAdd }
 
-ip_address_delete:
-  path:     /adresy-ip/usun
-  methods: [post]
-  defaults: { _controller: AppBundle:Panel:ipAddressDelete }
 
 
-ip_address_add:
-  path:     /adresy-ip/dodaj/{id}
-  defaults: { _controller: AppBundle:Panel:ipAddressAdd }
 
-#Aktywnosc
-
-activity_data:
-  path:     /aktywnosc/dane
-  defaults: { _controller: AppBundle:Panel:activityData }
-
-#activity_data_id:
-#  path:     /aktywnosc/dane/{activity_id}
-#  defaults: { _controller: AppBundle:Panel:activityData }
-
-activity_export:
-  path:     /aktywnosc-eksport
-  defaults: { _controller: AppBundle:Panel:activityExport }
-
-activity_add:
-  path:     /aktywnosc/dodaj
-  defaults: { _controller: AppBundle:Panel:activityAdd }
-
-#aplikacja
-
-application_generate_codes:
-  path:     /aplikacja/generuj-kody
-  defaults: { _controller: AppBundle:Panel:generateCodes }
-
-application_add:
-  path:     /aplikacja/dodaj
-  defaults: { _controller: AppBundle:Panel:applicationAdd }
-
-application_join_activity:
-  path:     /aplikacja/dolacz-formularz
-  defaults: { _controller: AppBundle:Panel:applicationJoinActivity }
 
 #Dokumenty
 
-documents_for_agency:
-  path:     /dokumenty
-  defaults: { _controller: AppBundle:Panel:documents }
+document_for_agency:
+  path:     /dokument/agencja
+  defaults: { _controller: AppBundle:Document:agency }
+
 
 
 

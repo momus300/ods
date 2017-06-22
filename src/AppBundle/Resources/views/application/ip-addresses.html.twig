@@ -15,7 +15,7 @@
                 </select>
             </div>
             <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Send</button>
+                <button type="submit" class="btn btn-primary">Pokaż</button>
             </div>
         </form>
     </div>
@@ -43,11 +43,11 @@
             {% endfor %}
             </tbody>
         </table>
-        <form class="form-inline" action="" method="post">
-            <input type="text" name="address_ip"/>
+        {#<form class="form-inline" action="" method="post">#}
+            {#<input type="text" name="address_ip"/>#}
 
-            <a href="{{ path('ip_address_add', {'id': 3}) }}" class="btn btn-success">Dodaj</a>
-        </form>
+            {#<a href="{{ path('ip_address_add', {'id': 3}) }}" class="btn btn-success">Dodaj</a>#}
+        {#</form>#}
     </div>
 {% endblock %}
 

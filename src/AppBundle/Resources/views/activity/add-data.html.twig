@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+
+        <form class="form-inline" action="" method="post">
+
+            <div class="col-md-10">
+                <select name="activity_id" class="form-control selectpicker" data-live-search="true">
+                    {% for activity in activities %}
+                        <option value="{{ activity.id }}">{{ activity.code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+
+            <div class="row">
+                <h2>Lista pól dla aktywności o ID: {{ app.request.get('activity_id') }}</h2>
+                <table class="table table-hover" id="data_def">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Nazwa pola</th>
+                        <th>Wymagane</th>
+                        {#<th>Wymagane</th>#}
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {#{% set i = 1 %}#}
+                        <tr id="data_row">{{ include('@App/activity/data-def-row.html.twig') }}</tr>
+                    {#{% for giodo in giodoDefinition if giodoDefinition %}#}
+                        {#<tr>#}
+                            {#<td>{{ activityData|length + loop.index }}</td>#}
+                            {#<td>{{ giodo.code }}</td>#}
+                            {#<td>{{ giodo.description }}</td>#}
+                            {#<td>{{ data.required ? 'tak' : 'nie' }}</td>#}
+                        {#</tr>#}
+                    {#{% else %}#}
+                        {#<tr>#}
+                            {#<td colspan="3"><p class="text-center">Brak pól dla aktywnosci</p></td>#}
+                        {#</tr>#}
+                    {#{% endfor %}#}
+                    </tbody>
+                </table>
+                <a class="btn btn-default" id="data_def_add" href="#">Dodaj pole</a>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function(){
+            row = $('tr#data_row').html();
+            $('a#data_def_add').click(function(e){
+                e.preventDefault();
+                $('table#data_def tbody').append('<tr>' + row + '</tr>');
+            })
+        });
+    </script>
+{% endblock %}
+

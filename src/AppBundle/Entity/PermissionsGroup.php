@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class PermissionsGroup
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=45, nullable=false)
@@ -41,18 +50,9 @@ class PermissionsGroup
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Permissions", inversedBy="permissionGroup")
+     * @ORM\ManyToMany(targetEntity="Permissions", inversedBy="permissionGroup")
      * @ORM\JoinTable(name="permission_group_permission",
      *   joinColumns={
      *     @ORM\JoinColumn(name="permission_group_id", referencedColumnName="id")
@@ -72,6 +72,16 @@ class PermissionsGroup
         $this->permission = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -167,16 +177,6 @@ class PermissionsGroup
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

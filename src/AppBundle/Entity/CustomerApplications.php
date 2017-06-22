@@ -15,33 +15,29 @@ class CustomerApplications
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \AppBundle\Entity\Customers
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\Column(name="applications_id", type="integer", nullable=false)
+     */
+    private $applicationsId;
+
+    /**
+     * @var \Customers
+     *
+     * @ORM\ManyToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customers_id", referencedColumnName="id"),
      *   @ORM\JoinColumn(name="brand_set_id", referencedColumnName="brand_set_id")
      * })
      */
     private $customers;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="applications_id", referencedColumnName="id"),
-     *   @ORM\JoinColumn(name="brand_set_id", referencedColumnName="brand_set_id")
-     * })
-     */
-    private $applications;
 
 
 
@@ -53,6 +49,30 @@ class CustomerApplications
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set applicationsId
+     *
+     * @param integer $applicationsId
+     *
+     * @return CustomerApplications
+     */
+    public function setApplicationsId($applicationsId)
+    {
+        $this->applicationsId = $applicationsId;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationsId
+     *
+     * @return integer
+     */
+    public function getApplicationsId()
+    {
+        return $this->applicationsId;
     }
 
     /**
@@ -77,29 +97,5 @@ class CustomerApplications
     public function getCustomers()
     {
         return $this->customers;
-    }
-
-    /**
-     * Set applications
-     *
-     * @param \AppBundle\Entity\Applications $applications
-     *
-     * @return CustomerApplications
-     */
-    public function setApplications(\AppBundle\Entity\Applications $applications = null)
-    {
-        $this->applications = $applications;
-
-        return $this;
-    }
-
-    /**
-     * Get applications
-     *
-     * @return \AppBundle\Entity\Applications
-     */
-    public function getApplications()
-    {
-        return $this->applications;
     }
 }

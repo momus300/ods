@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CcConfigurationsPasDatas
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="recommended", type="boolean", nullable=false)
@@ -62,35 +71,36 @@ class CcConfigurationsPasDatas
     private $deleted;
 
     /**
-     * @var integer
+     * @var \CcConfigurations
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasDatas
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasDatas")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pas_data_id", referencedColumnName="id")
-     * })
-     */
-    private $pasData;
-
-    /**
-     * @var \AppBundle\Entity\CcConfigurations
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\CcConfigurations")
+     * @ORM\ManyToOne(targetEntity="CcConfigurations")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cc_configuration_id", referencedColumnName="id")
      * })
      */
     private $ccConfiguration;
 
+    /**
+     * @var \PasDatas
+     *
+     * @ORM\ManyToOne(targetEntity="PasDatas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pas_data_id", referencedColumnName="id")
+     * })
+     */
+    private $pasData;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set recommended
@@ -261,13 +271,27 @@ class CcConfigurationsPasDatas
     }
 
     /**
-     * Get id
+     * Set ccConfiguration
      *
-     * @return integer
+     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
+     *
+     * @return CcConfigurationsPasDatas
      */
-    public function getId()
+    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
     {
-        return $this->id;
+        $this->ccConfiguration = $ccConfiguration;
+
+        return $this;
+    }
+
+    /**
+     * Get ccConfiguration
+     *
+     * @return \AppBundle\Entity\CcConfigurations
+     */
+    public function getCcConfiguration()
+    {
+        return $this->ccConfiguration;
     }
 
     /**
@@ -292,29 +316,5 @@ class CcConfigurationsPasDatas
     public function getPasData()
     {
         return $this->pasData;
-    }
-
-    /**
-     * Set ccConfiguration
-     *
-     * @param \AppBundle\Entity\CcConfigurations $ccConfiguration
-     *
-     * @return CcConfigurationsPasDatas
-     */
-    public function setCcConfiguration(\AppBundle\Entity\CcConfigurations $ccConfiguration = null)
-    {
-        $this->ccConfiguration = $ccConfiguration;
-
-        return $this;
-    }
-
-    /**
-     * Get ccConfiguration
-     *
-     * @return \AppBundle\Entity\CcConfigurations
-     */
-    public function getCcConfiguration()
-    {
-        return $this->ccConfiguration;
     }
 }

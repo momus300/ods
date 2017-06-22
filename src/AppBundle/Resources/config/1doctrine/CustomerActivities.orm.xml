@@ -76,6 +76,7 @@
         <join-column name="activity_id" referenced-column-name="id"/>
       </join-columns>
     </many-to-one>
+    <many-to-many field="lead" target-entity="Leads" mapped-by="customerActivity" fetch="LAZY"/>
     <many-to-many field="giodoDefinition" target-entity="GiodoDefinition" mapped-by="customerActivity" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

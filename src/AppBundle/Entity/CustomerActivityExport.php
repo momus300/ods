@@ -20,11 +20,11 @@ class CustomerActivityExport
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var \AppBundle\Entity\ActivityExportRequests
+     * @var \ActivityExportRequests
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\ActivityExportRequests")
+     * @ORM\OneToOne(targetEntity="ActivityExportRequests")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_export_request_id", referencedColumnName="id")
      * })
@@ -32,11 +32,11 @@ class CustomerActivityExport
     private $activityExportRequest;
 
     /**
-     * @var \AppBundle\Entity\CustomerActivities
+     * @var \CustomerActivities
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\CustomerActivities")
+     * @ORM\OneToOne(targetEntity="CustomerActivities")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="customer_activity_id", referencedColumnName="id")
      * })
@@ -44,9 +44,9 @@ class CustomerActivityExport
     private $customerActivity;
 
     /**
-     * @var \AppBundle\Entity\Applications
+     * @var \Applications
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
+     * @ORM\ManyToOne(targetEntity="Applications")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      * })

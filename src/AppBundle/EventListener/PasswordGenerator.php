@@ -18,9 +18,6 @@ class PasswordGenerator
     {
         $entity = $args->getEntity();
         if ($entity instanceof Applications) {
-//            global $kernel;
-//            /** @var \AppBundle\Services\PasswordGenerator $generator */
-//            $generator = $kernel->getContainer()->get('app.password_generator');
             $entity->setAdminKey($this->PasswordGenerator->generate()->getPassword());
             $entity->setPublicKey($this->PasswordGenerator->generate()->getPassword());
         }

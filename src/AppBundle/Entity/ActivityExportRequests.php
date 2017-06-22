@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class ActivityExportRequests
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="reason", type="string", length=100, nullable=false)
@@ -48,35 +57,36 @@ class ActivityExportRequests
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \ActivityExportDefs
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Applications
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Applications")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
-     * })
-     */
-    private $application;
-
-    /**
-     * @var \AppBundle\Entity\ActivityExportDefs
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ActivityExportDefs")
+     * @ORM\ManyToOne(targetEntity="ActivityExportDefs")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="activity_export_def_id", referencedColumnName="id")
      * })
      */
     private $activityExportDef;
 
+    /**
+     * @var \Applications
+     *
+     * @ORM\ManyToOne(targetEntity="Applications")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="application_id", referencedColumnName="id")
+     * })
+     */
+    private $application;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set reason
@@ -199,13 +209,27 @@ class ActivityExportRequests
     }
 
     /**
-     * Get id
+     * Set activityExportDef
      *
-     * @return integer
+     * @param \AppBundle\Entity\ActivityExportDefs $activityExportDef
+     *
+     * @return ActivityExportRequests
      */
-    public function getId()
+    public function setActivityExportDef(\AppBundle\Entity\ActivityExportDefs $activityExportDef = null)
     {
-        return $this->id;
+        $this->activityExportDef = $activityExportDef;
+
+        return $this;
+    }
+
+    /**
+     * Get activityExportDef
+     *
+     * @return \AppBundle\Entity\ActivityExportDefs
+     */
+    public function getActivityExportDef()
+    {
+        return $this->activityExportDef;
     }
 
     /**
@@ -230,29 +254,5 @@ class ActivityExportRequests
     public function getApplication()
     {
         return $this->application;
-    }
-
-    /**
-     * Set activityExportDef
-     *
-     * @param \AppBundle\Entity\ActivityExportDefs $activityExportDef
-     *
-     * @return ActivityExportRequests
-     */
-    public function setActivityExportDef(\AppBundle\Entity\ActivityExportDefs $activityExportDef = null)
-    {
-        $this->activityExportDef = $activityExportDef;
-
-        return $this;
-    }
-
-    /**
-     * Get activityExportDef
-     *
-     * @return \AppBundle\Entity\ActivityExportDefs
-     */
-    public function getActivityExportDef()
-    {
-        return $this->activityExportDef;
     }
 }

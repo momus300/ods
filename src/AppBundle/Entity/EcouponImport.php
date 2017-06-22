@@ -15,6 +15,15 @@ class EcouponImport
     /**
      * @var integer
      *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="ecoupon_group_id", type="integer", nullable=false)
      */
     private $ecouponGroupId;
@@ -75,16 +84,17 @@ class EcouponImport
      */
     private $created = 'CURRENT_TIMESTAMP';
 
+
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $id;
-
-
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set ecouponGroupId
@@ -300,15 +310,5 @@ class EcouponImport
     public function getCreated()
     {
         return $this->created;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

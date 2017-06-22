@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class PasDependencies
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
@@ -48,35 +57,36 @@ class PasDependencies
     private $activeEnd;
 
     /**
-     * @var integer
+     * @var \PasDatas
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\PasDatas
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasDatas")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pas_data_id2", referencedColumnName="id")
-     * })
-     */
-    private $pasData2;
-
-    /**
-     * @var \AppBundle\Entity\PasDatas
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PasDatas")
+     * @ORM\ManyToOne(targetEntity="PasDatas")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="pas_data_id1", referencedColumnName="id")
      * })
      */
     private $pasData1;
 
+    /**
+     * @var \PasDatas
+     *
+     * @ORM\ManyToOne(targetEntity="PasDatas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="pas_data_id2", referencedColumnName="id")
+     * })
+     */
+    private $pasData2;
 
+
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set created
@@ -199,13 +209,27 @@ class PasDependencies
     }
 
     /**
-     * Get id
+     * Set pasData1
      *
-     * @return integer
+     * @param \AppBundle\Entity\PasDatas $pasData1
+     *
+     * @return PasDependencies
      */
-    public function getId()
+    public function setPasData1(\AppBundle\Entity\PasDatas $pasData1 = null)
     {
-        return $this->id;
+        $this->pasData1 = $pasData1;
+
+        return $this;
+    }
+
+    /**
+     * Get pasData1
+     *
+     * @return \AppBundle\Entity\PasDatas
+     */
+    public function getPasData1()
+    {
+        return $this->pasData1;
     }
 
     /**
@@ -230,29 +254,5 @@ class PasDependencies
     public function getPasData2()
     {
         return $this->pasData2;
-    }
-
-    /**
-     * Set pasData1
-     *
-     * @param \AppBundle\Entity\PasDatas $pasData1
-     *
-     * @return PasDependencies
-     */
-    public function setPasData1(\AppBundle\Entity\PasDatas $pasData1 = null)
-    {
-        $this->pasData1 = $pasData1;
-
-        return $this;
-    }
-
-    /**
-     * Get pasData1
-     *
-     * @return \AppBundle\Entity\PasDatas
-     */
-    public function getPasData1()
-    {
-        return $this->pasData1;
     }
 }

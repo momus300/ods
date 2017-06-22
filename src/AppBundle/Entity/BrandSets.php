@@ -8,10 +8,19 @@ use Doctrine\ORM\Mapping as ORM;
  * BrandSets
  *
  * @ORM\Table(name="brand_sets")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\BrandSetsRepository")
  */
 class BrandSets
 {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
     /**
      * @var integer
      *
@@ -24,7 +33,7 @@ class BrandSets
      *
      * @ORM\Column(name="created", type="datetime", nullable=false)
      */
-    private $created = 'CURRENT_TIMESTAMP';
+    private $created;
 
     /**
      * @var \DateTime
@@ -34,18 +43,9 @@ class BrandSets
     private $lastModified;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Brands", inversedBy="brandSet")
+     * @ORM\ManyToMany(targetEntity="Brands", inversedBy="brandSet")
      * @ORM\JoinTable(name="brand_set_brands",
      *   joinColumns={
      *     @ORM\JoinColumn(name="brand_set_id", referencedColumnName="id")
@@ -65,6 +65,16 @@ class BrandSets
         $this->brand = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set binCode
@@ -93,13 +103,13 @@ class BrandSets
     /**
      * Set created
      *
-     * @param \DateTime $created
+     * @ORM\PrePersist()
      *
      * @return BrandSets
      */
-    public function setCreated($created)
+    public function setCreated()
     {
-        $this->created = $created;
+        $this->created = new \DateTime();
 
         return $this;
     }
@@ -136,16 +146,6 @@ class BrandSets
     public function getLastModified()
     {
         return $this->lastModified;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**

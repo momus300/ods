@@ -13,6 +13,15 @@ use Doctrine\ORM\Mapping as ORM;
 class CustomerLoginHistory
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="ext_ip", type="string", length=15, nullable=false)
@@ -34,28 +43,19 @@ class CustomerLoginHistory
     private $created = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var integer
+     * @var \Sessions
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \AppBundle\Entity\Customers
-     *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Customers")
+     * @ORM\ManyToOne(targetEntity="Sessions")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="session_id", referencedColumnName="id")
      * })
      */
-    private $customer;
+    private $session;
 
     /**
-     * @var \AppBundle\Entity\ApplicationAuthTypes
+     * @var \ApplicationAuthTypes
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ApplicationAuthTypes")
+     * @ORM\ManyToOne(targetEntity="ApplicationAuthTypes")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="auth_type_id", referencedColumnName="auth_type_id"),
      *   @ORM\JoinColumn(name="application_id", referencedColumnName="application_id")
@@ -64,16 +64,26 @@ class CustomerLoginHistory
     private $authType;
 
     /**
-     * @var \AppBundle\Entity\Sessions
+     * @var \Customers
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Sessions")
+     * @ORM\ManyToOne(targetEntity="Customers")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     *   @ORM\JoinColumn(name="customer_id", referencedColumnName="id")
      * })
      */
-    private $session;
+    private $customer;
 
 
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set extIp
@@ -148,37 +158,27 @@ class CustomerLoginHistory
     }
 
     /**
-     * Get id
+     * Set session
      *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set customer
-     *
-     * @param \AppBundle\Entity\Customers $customer
+     * @param \AppBundle\Entity\Sessions $session
      *
      * @return CustomerLoginHistory
      */
-    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
+    public function setSession(\AppBundle\Entity\Sessions $session = null)
     {
-        $this->customer = $customer;
+        $this->session = $session;
 
         return $this;
     }
 
     /**
-     * Get customer
+     * Get session
      *
-     * @return \AppBundle\Entity\Customers
+     * @return \AppBundle\Entity\Sessions
      */
-    public function getCustomer()
+    public function getSession()
     {
-        return $this->customer;
+        return $this->session;
     }
 
     /**
@@ -206,26 +206,26 @@ class CustomerLoginHistory
     }
 
     /**
-     * Set session
+     * Set customer
      *
-     * @param \AppBundle\Entity\Sessions $session
+     * @param \AppBundle\Entity\Customers $customer
      *
      * @return CustomerLoginHistory
      */
-    public function setSession(\AppBundle\Entity\Sessions $session = null)
+    public function setCustomer(\AppBundle\Entity\Customers $customer = null)
     {
-        $this->session = $session;
+        $this->customer = $customer;
 
         return $this;
     }
 
     /**
-     * Get session
+     * Get customer
      *
-     * @return \AppBundle\Entity\Sessions
+     * @return \AppBundle\Entity\Customers
      */
-    public function getSession()
+    public function getCustomer()
     {
-        return $this->session;
+        return $this->customer;
     }
 }
