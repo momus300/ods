@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -78,12 +79,20 @@ class ActivityDataDefs
     private $lead;
 
     /**
+     * @var \ActivityData
+     *
+     * @ORM\OneToMany(targetEntity="ActivityData", mappedBy="data")
+     */
+    private $data;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activity = new ArrayCollection();
+        $this->lead = new ArrayCollection();
+        $this->data = new ArrayCollection();
     }
 
 
@@ -307,5 +316,39 @@ class ActivityDataDefs
     public function getLead()
     {
         return $this->lead;
+    }
+
+    /**
+     * Add datum
+     *
+     * @param \AppBundle\Entity\ActivityData $datum
+     *
+     * @return ActivityDataDefs
+     */
+    public function addDatum(\AppBundle\Entity\ActivityData $datum)
+    {
+        $this->data[] = $datum;
+
+        return $this;
+    }
+
+    /**
+     * Remove datum
+     *
+     * @param \AppBundle\Entity\ActivityData $datum
+     */
+    public function removeDatum(\AppBundle\Entity\ActivityData $datum)
+    {
+        $this->data->removeElement($datum);
+    }
+
+    /**
+     * Get data
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 }

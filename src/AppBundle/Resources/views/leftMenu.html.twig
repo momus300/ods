@@ -9,9 +9,9 @@
 
 {% if app.request.attributes.get('_route') starts with 'activity' %}
     <a href="{{ path('activity_add') }}"
-       class="list-group-item {% if app.request.attributes.get('_route') == 'activity_add' %}active{% endif %}">Dodaj aktywność (formularz)</a>
+       class="list-group-item {% if app.request.attributes.get('_route') == 'activity_add' %}active{% endif %}">Dodaj aktywność</a>
     <a href="{{ path('activity_add_data') }}"
-       class="list-group-item {% if app.request.attributes.get('_route') == 'activity_add_data' %}active{% endif %}">Dodaj dane do aktywnosci</a>
+       class="list-group-item {% if app.request.attributes.get('_route') == 'activity_add_data' %}active{% endif %}">Dodaj pola do aktywności</a>
     <a href="{{ path('activity_data') }}"
        class="list-group-item {% if app.request.attributes.get('_route') == 'activity_data' %}active{% endif %}">Pola
         aktywności</a>

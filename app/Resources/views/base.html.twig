@@ -8,6 +8,9 @@
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap/dist/css/bootstrap-theme.min.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css') }}">
+        {% stylesheets '@AppBundle/Resources/public/css/style.css' %}
+            <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
     {% endblock %}
 </head>
 <body style="background-color: {{ app.environment()=='prod'?'#da9494':app.environment()=='test'?'#e0d454':'#a5d082' }}">

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -154,19 +155,18 @@ class Activities
     private $reportGroup;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \ActivityData
      *
-     * @ORM\ManyToMany(targetEntity="ActivityDataDefs", inversedBy="activity")
-     * @ORM\JoinTable(name="activity_data",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="data_id", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\OneToMany(targetEntity="ActivityData", mappedBy="activity")
      */
-    private $data;
+    private $activityDatas;
+
+    /**
+     * @var \ActivityGiodo
+     *
+     * @ORM\OneToMany(targetEntity="ActivityGiodo", mappedBy="giodo")
+     */
+    private $giodo;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -189,13 +189,6 @@ class Activities
      * @ORM\ManyToMany(targetEntity="ActivityExportDefs", mappedBy="activity")
      */
     private $activityExportDef;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="GiodoDefinition", mappedBy="activity")
-     */
-    private $giodoDefinition;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -224,12 +217,12 @@ class Activities
      */
     public function __construct()
     {
-        $this->data = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->emailTemplate = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->activityExportDef = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->giodoDefinition = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->smsTemplate = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->application = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->activityDatas = new ArrayCollection();
+        $this->giodo = new ArrayCollection();
+        $this->emailTemplate = new ArrayCollection();
+        $this->activityExportDef = new ArrayCollection();
+        $this->smsTemplate = new ArrayCollection();
+        $this->application = new ArrayCollection();
     }
 
 
@@ -678,13 +671,13 @@ class Activities
     /**
      * Add datum
      *
-     * @param \AppBundle\Entity\ActivityDataDefs $datum
+     * @param \AppBundle\Entity\ActivityData $datum
      *
      * @return Activities
      */
-    public function addDatum(\AppBundle\Entity\ActivityDataDefs $datum)
+    public function addDatum(\AppBundle\Entity\ActivityData $datum)
     {
-        $this->data[] = $datum;
+        $this->activityDatas[] = $datum;
 
         return $this;
     }
@@ -692,11 +685,11 @@ class Activities
     /**
      * Remove datum
      *
-     * @param \AppBundle\Entity\ActivityDataDefs $datum
+     * @param \AppBundle\Entity\ActivityData $datum
      */
-    public function removeDatum(\AppBundle\Entity\ActivityDataDefs $datum)
+    public function removeDatum(\AppBundle\Entity\ActivityData $datum)
     {
-        $this->data->removeElement($datum);
+        $this->activityDatas->removeElement($datum);
     }
 
     /**
@@ -706,7 +699,7 @@ class Activities
      */
     public function getData()
     {
-        return $this->data;
+        return $this->activityDatas;
     }
 
     /**
@@ -778,40 +771,6 @@ class Activities
     }
 
     /**
-     * Add giodoDefinition
-     *
-     * @param \AppBundle\Entity\GiodoDefinition $giodoDefinition
-     *
-     * @return Activities
-     */
-    public function addGiodoDefinition(\AppBundle\Entity\GiodoDefinition $giodoDefinition)
-    {
-        $this->giodoDefinition[] = $giodoDefinition;
-
-        return $this;
-    }
-
-    /**
-     * Remove giodoDefinition
-     *
-     * @param \AppBundle\Entity\GiodoDefinition $giodoDefinition
-     */
-    public function removeGiodoDefinition(\AppBundle\Entity\GiodoDefinition $giodoDefinition)
-    {
-        $this->giodoDefinition->removeElement($giodoDefinition);
-    }
-
-    /**
-     * Get giodoDefinition
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGiodoDefinition()
-    {
-        return $this->giodoDefinition;
-    }
-
-    /**
      * Add smsTemplate
      *
      * @param \AppBundle\Entity\SmsTemplates $smsTemplate
@@ -877,5 +836,39 @@ class Activities
     public function getApplication()
     {
         return $this->application;
+    }
+
+    /**
+     * Add giodo
+     *
+     * @param \AppBundle\Entity\ActivityGiodo $giodo
+     *
+     * @return Activities
+     */
+    public function addGiodo(\AppBundle\Entity\ActivityGiodo $giodo)
+    {
+        $this->giodo[] = $giodo;
+
+        return $this;
+    }
+
+    /**
+     * Remove giodo
+     *
+     * @param \AppBundle\Entity\ActivityGiodo $giodo
+     */
+    public function removeGiodo(\AppBundle\Entity\ActivityGiodo $giodo)
+    {
+        $this->giodo->removeElement($giodo);
+    }
+
+    /**
+     * Get giodo
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGiodo()
+    {
+        return $this->giodo;
     }
 }

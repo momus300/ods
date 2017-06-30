@@ -3,14 +3,17 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Activities;
+use AppBundle\Entity\ActivityData;
 use AppBundle\Entity\ActivityDataDefs;
 use AppBundle\Entity\ActivityExportDefs;
+use AppBundle\Entity\ActivityGiodo;
 use AppBundle\Entity\ApplicationIps;
 use AppBundle\Entity\Applications;
 use AppBundle\Entity\BrandSets;
 use AppBundle\Entity\Methods;
 use AppBundle\Form\ActivityAddDataType;
 use AppBundle\Form\ActivityApplicationType;
+use AppBundle\Form\ActivityDataDefsType;
 use AppBundle\Form\ApplicationsType;
 use AppBundle\Utils\CsvExport;
 use AppBundle\Utils\PasswordGenerator;
@@ -38,25 +41,71 @@ class ActivityController extends Controller
 
     public function addAction(Request $request)
     {
-        $activity = new Activities();
-        $form = $this->createForm(ActivityApplicationType::class, $activity);
+        $form = $this->createForm(ActivityApplicationType::class, new Activities());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Activities $data */
-            $data = $form->getData();
-            /** @var Applications $application */
-            $application = $data->getApplication()->first();
-            $application->addActivity($data);
-            /** @var ActivityExportDefs $activityEsportDef */
-            $activityEsportDef = $data->getActivityExportDef()->first();
+            /** @var Activities $activity */
+            $activity = $form->getData();
+
             $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+
+            $dataRequired = $form->get("activityDataRequired")->getData();
+            if($dataRequired){
+                foreach($dataRequired as $activityDataDef){
+                    $activityData = new ActivityData();
+                    $activityData->setRequired(true);
+                    $activityData->setActivity($activity);
+                    $activityData->setData($activityDataDef);
+                    $em->persist($activityData);
+                }
+            }
+
+            $dataOptional = $form->get("activityDataOptional")->getData();
+            if($dataOptional){
+                foreach($dataOptional as $activityDataDef){
+                    $activityData = new ActivityData();
+                    $activityData->setRequired(false);
+                    $activityData->setActivity($activity);
+                    $activityData->setData($activityDataDef);
+                    $em->persist($activityData);
+                }
+            }
+
+            $giodoRequired = $form->get("activityGiodoRequired")->getData();
+            if($giodoRequired){
+                foreach($giodoRequired as $giodoDef){
+                    $activityGiodo = new ActivityGiodo();
+                    $activityGiodo->setRequired(true);
+                    $activityGiodo->setActivity($activity);
+                    $activityGiodo->setGiodoDefinition($giodoDef);
+                    $em->persist($activityGiodo);
+                }
+            }
+
+            $giodoOptional = $form->get("activityGiodoOptional")->getData();
+            if($giodoOptional){
+                foreach($giodoOptional as $giodoDef){
+                    $activityGiodo = new ActivityGiodo();
+                    $activityGiodo->setRequired(false);
+                    $activityGiodo->setActivity($activity);
+                    $activityGiodo->setGiodoDefinition($giodoDef);
+                    $em->persist($activityGiodo);
+                }
+            }
+
+            /** @var Applications $application */
+            $application = $activity->getApplication()->first();
+            $application->addActivity($activity);
+
+            /** @var ActivityExportDefs $activityEsportDef */
+            $activityEsportDef = $activity->getActivityExportDef()->first();
             if($activityEsportDef){
-                $activityEsportDef->addActivity($data);
+                $activityEsportDef->addActivity($activity);
                 $em->persist($activityEsportDef);
             }
-            $em->persist($application);
-            $em->persist($data);
+
             $em->flush();
 
             $this->addFlash('success', 'Formularz został dodany.');
@@ -71,15 +120,16 @@ class ActivityController extends Controller
 
     public function addDataAction(Request $request)
     {
-        $repository = $this->getDoctrine()->getRepository('AppBundle:Activities');
-        $activities = $repository->findBy([], ['id' => 'DESC']);
-
+//        $repository = $this->getDoctrine()->getRepository('AppBundle:Activities');
+//        $activities = $repository->findBy([], ['id' => 'DESC']);
+//        dump($activities);
+//        die();
 //        $activityDataDefs = $this->getDoctrine()->getRepository(ActivityDataDefs::class)->findBy([], null, 5);
 
 
-//        $activityDataDefs = new ActivityDataDefs();
-        $activityDataDefs = new Activities();
-        $form = $this->createForm(ActivityAddDataType::class, $activityDataDefs);
+        $activityDataDefs = new ActivityDataDefs();
+//        $activity = new Activities();
+        $form = $this->createForm(ActivityDataDefsType::class, $activityDataDefs);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

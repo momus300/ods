@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -122,13 +123,21 @@ class GiodoDefinition
     private $lead;
 
     /**
+     * @var \ActivityGiodo
+     *
+     * @ORM\OneToMany(targetEntity="ActivityGiodo", mappedBy="giodoDefinition")
+     */
+    private $giodoDefinitions;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
-        $this->activity = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->customerActivity = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->lead = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->giodoDefinitions = new ArrayCollection();
+        $this->activity = new ArrayCollection();
+        $this->customerActivity = new ArrayCollection();
+        $this->lead = new ArrayCollection();
     }
 
 
@@ -458,5 +467,39 @@ class GiodoDefinition
     public function getLead()
     {
         return $this->lead;
+    }
+
+    /**
+     * Add giodoDefinition
+     *
+     * @param \AppBundle\Entity\ActivityGiodo $giodoDefinition
+     *
+     * @return GiodoDefinition
+     */
+    public function addGiodoDefinition(\AppBundle\Entity\ActivityGiodo $giodoDefinition)
+    {
+        $this->giodoDefinitions[] = $giodoDefinition;
+
+        return $this;
+    }
+
+    /**
+     * Remove giodoDefinition
+     *
+     * @param \AppBundle\Entity\ActivityGiodo $giodoDefinition
+     */
+    public function removeGiodoDefinition(\AppBundle\Entity\ActivityGiodo $giodoDefinition)
+    {
+        $this->giodoDefinitions->removeElement($giodoDefinition);
+    }
+
+    /**
+     * Get giodoDefinitions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGiodoDefinitions()
+    {
+        return $this->giodoDefinitions;
     }
 }

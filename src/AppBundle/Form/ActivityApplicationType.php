@@ -2,6 +2,7 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\ActivityData;
 use AppBundle\Entity\ActivityDataDefs;
 use AppBundle\Entity\ActivityExportDefs;
 use AppBundle\Entity\Applications;
@@ -58,27 +59,63 @@ class ActivityApplicationType extends AbstractType
                 'multiple' => true,
                 'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
             ])
-//            ->add('data', EntityType::class, [
-//                'class' => ActivityDataDefs::class,
-//                'choice_label' => function ($activityDataDefs) {
-//                    /** @var ActivityDataDefs $activityDataDefs */
-//                    return '[' . $activityDataDefs->getName() . '] ' . $activityDataDefs->getDescription();
-//                },
-//                'label' => 'Pola danych',
+            ->add('activityDataRequired', EntityType::class, [
+                'class' => ActivityDataDefs::class,
+                'choice_label' => function ($ctivityDataDefs) {
+                    /** @var ActivityDataDefs $ctivityDataDefs */
+                    return '[' . $ctivityDataDefs->getName() . '] ' . $ctivityDataDefs->getDescription();
+                },
+                'label' => 'Wymagane dane',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
+            ])
+            ->add('activityDataOptional', EntityType::class, [
+                'class' => ActivityDataDefs::class,
+                'choice_label' => function ($ctivityDataDefs) {
+                    /** @var ActivityDataDefs $ctivityDataDefs */
+                    return '[' . $ctivityDataDefs->getName() . '] ' . $ctivityDataDefs->getDescription();
+                },
+                'label' => 'Opcjonalne dane',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
+            ])
+            ->add('activityGiodoRequired', EntityType::class, [
+                'class' => GiodoDefinition::class,
+                'choice_label' => function ($giodoDefinition) {
+                    /** @var GiodoDefinition $giodoDefinition */
+                    return '[' . $giodoDefinition->getCode() . '] ' . $giodoDefinition->getDescription();
+                },
+                'label' => 'Wymagane zgody',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
+            ])
+            ->add('activityGiodoOptional', EntityType::class, [
+                'class' => GiodoDefinition::class,
+                'choice_label' => function ($giodoDefinition) {
+                    /** @var GiodoDefinition $giodoDefinition */
+                    return '[' . $giodoDefinition->getCode() . '] ' . $giodoDefinition->getDescription();
+                },
+                'label' => 'Opcjonalne zgody',
+                'required' => false,
+                'mapped' => false,
+                'multiple' => true,
+                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
+            ])
+//            ->add('activityGiodoRequired', ActivityGiodoDefsType::class, [
+//                'data_class' => ActivityGiodoDefsType::class,
 //                'required' => true,
-//                'multiple' => true,
-//                'attr' => ['class' => 'form-control selectpicker', 'data-live-search' => 'true']
+//                'label' => 'Wymagane zgody'
 //            ])
-//            ->add('giodoDefinition', EntityType::class, [
-//                'class' => GiodoDefinition::class,
-//                'choice_label' => function ($giodoDefinition) {
-//                    /** @var GiodoDefinition $giodoDefinition */
-//                    return '[' . $giodoDefinition->getCode() . '] ' . $giodoDefinition->getDescription();
-//                },
-//                'label' => 'Pola zgod',
-//                'required' => true,
-//                'multiple' => true,
-//                'attr' => ['style' => 'overflow:auto', 'class' => 'form-control selectpicker', 'data-live-search' => 'true']
+//            ->add('activityGiodoOptional', ActivityGiodoDefsType::class, [
+//                'data_class' => ActivityGiodoDefsType::class,
+//                'required' => false,
+//                'label' => 'Opcjonalne zgody'
 //            ])
             ->add('save', SubmitType::class, ['label' => 'Dodaj', 'attr' => ['class' => 'btn btn-success']]);
     }
